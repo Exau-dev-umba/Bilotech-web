@@ -32,7 +32,7 @@ Route::post('/login', function (Request $request) {
     return response()->json(['user'=>$user, 'token'=>$token]);
 });
 
-
+Route::post('/register', [AuthController::class,'register']);
 
 
 

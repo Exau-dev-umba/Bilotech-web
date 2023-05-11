@@ -25,6 +25,24 @@ class AuthController extends Controller
         }
     }
     
+     //create
+       public function register(CreateUserAuthenticating $request, User $users){
+        try {
+            $users->name = $request->name;
+            $users->email = $request->email;
+            $users->password = Hash::make($request->password, [
+                "rounds" => 12
+            ]);
+            $users->save();
+            return response()->json([
+                "status_code" => "200",
+                "status_message" => "Operation de creation d'Utilisateur reussi",
+            ]);
+        }catch(Exception $e){
+            return response()->json($e);
+        }
+    }
+
 
 
 
