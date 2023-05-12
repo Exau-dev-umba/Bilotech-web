@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\conversationController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,6 +16,9 @@ use App\Http\Controllers\conversationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+require ('api_authentfication.php');
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
