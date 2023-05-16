@@ -7,7 +7,7 @@
                 <h2>Roles </h2>
             </div>
             <div class="text-right mx-4">
-                <a class="btn btn-outline-success" href="{{ route('roles.create') }}">create role</a><br>
+                <a class="btn btn-outline-success" href="{{ route('roles.create') }}"><i class="fas fa-plus-circle"></i></a><br>
             </div>
         </div>
     </div><br>
@@ -30,14 +30,14 @@
             <td>
                 <form action="{{ route('roles.destroy',$role->id) }}" method="POST">
    
-                    <a class="btn btn-outline-primary" href="{{ route('roles.show',$role->id) }}">Voir</a>
+                    <a class="btn btn-outline-primary" href="{{ route('roles.show',$role->id) }}"><i class="fas fa-folder"></a>
     
-                    <a class="btn btn-outline-success" href="{{ route('roles.edit',$role->id) }}">Éditer</a>
+                    <a class="btn btn-outline-success" href="{{ route('roles.edit',$role->id) }}"><i class="fas fa-pencil-alt"></a>
    
                     @csrf
                     @method('DELETE')
       
-                    <button type="submit" class="btn btn-outline-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash"></button>
                 </form>
             </td>
         </tr>

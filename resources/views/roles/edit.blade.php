@@ -47,10 +47,13 @@
              </tr>
              @endforeach
           </tbody>
-       </table>
-       <div class="input-group my-3 w-25">
-        <a href="{{route('roles.edit', $role->id)}}" class="btn btn-default form-control">Editer</a>
+       </table><br>
+       <div class="float-end">
+        <a href="{{route('roles.edit', $role->id)}}" class="btn btn-outline-primary">Editer</a>
      </div>
+     <div class="text-right mx-4">
+        <a class="btn btn-outline-success" href="{{ route('roles.index') }}"> Retour</a>
+    </div>
     </div>
  </div>
 @endsection

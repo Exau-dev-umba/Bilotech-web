@@ -6,7 +6,7 @@
                 <h2> Afficher un role</h2>
             </div>
             <div class="text-right mx-4">
-                <a class="btn btn-outline-primary" href="{{ route('roles.index') }}"> Retour</a>
+                <a class="btn btn-outline-primary" href="{{ route('roles.index') }}"><i class="bi bi-arrow-left-circle">Retour</i> </a>
             </div>
         </div>
     </div>
