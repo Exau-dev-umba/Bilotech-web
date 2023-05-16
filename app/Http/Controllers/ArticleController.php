@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use Illuminate\Support\Facades\Request;
 
 class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = 10; // Nombre d'articles par page
+
+        $articles = Article::paginate($perPage);
+       
+
+        return response()->json($articles);
     }
 
     /**
@@ -40,7 +47,18 @@ class ArticleController extends Controller
         $article->similar_ad = $request->input('similar_ad') ;
         $article->devise = $request->input('devise');
         $article->user_id = Auth::user()->id;
+        //$imagePath = $request->file('image')->store('images');
+        //$imagePath = $request->photo->storeAs('images', 'filename.jpg', '');
         
+        // Enregistrez les images associées à l'article
+        // foreach ($request->file('images') as $image) {
+        //     $imagePath = $image->store('images');
+
+        //     $imageModel = new Image();
+        //     $imageModel->article_id = $article->id;
+        //     $imageModel->image_path = $imagePath;
+        //     $imageModel->save();
+        // }
         if($article->save()){
             return response()->json([
                 'message' => 'Création success',
