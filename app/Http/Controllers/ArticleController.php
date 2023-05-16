@@ -80,7 +80,34 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-        //
+         
+        $article = Article::find($article->id);
+        $article->title = $request->input('title');
+        $article->keyword = $request->input('keyword');
+        $article->content = $request->input('content');
+        $article->country = $request->input('country');
+        $article->city = $request->input('city');
+        $article->price = $request->input('price');
+        $article->similar_ad = $request->input('similar_ad') ;
+        $article->devise = $request->input('devise');
+        $article->user_id = Auth::user()->id;
+        
+        if($article->save()){
+            return response()->json([
+                'message' => 'Modification success',
+                'data' => $article
+    
+            ], 201);
+        }
+
+
+        else{
+            return response()->json([
+                'success' => false,
+                'errors' => $article->errors(),
+
+            ], 500);
+        }
     }
 
     /**
