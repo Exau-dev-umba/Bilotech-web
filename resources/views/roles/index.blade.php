@@ -30,14 +30,14 @@
             <td>
                 <form action="{{ route('roles.destroy',$role->id) }}" method="POST">
    
-                    <a class="btn btn-outline-primary" href="{{ route('roles.show',$role->id) }}"><i class="fas fa-folder"></a>
+                    <a class="btn btn-outline-primary fas fa-folder" href="{{ route('roles.show',$role->id) }}"></a>
     
-                    <a class="btn btn-outline-success" href="{{ route('roles.edit',$role->id) }}"><i class="fas fa-pencil-alt"></a>
+                    <a class="btn btn-outline-success" href="{{ route('roles.edit',$role->id) }}"><i class="fas fa-pencil-alt"></i></a>
    
                     @csrf
                     @method('DELETE')
       
-                    <button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash"></button>
+                    <button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
                 </form>
             </td>
         </tr>
