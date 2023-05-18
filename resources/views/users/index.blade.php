@@ -21,11 +21,11 @@
                 <td> {{$user->email }} </td>
                 <td> {{ implode(',' , $user->roles()->get()->pluck('name')->toArray()) }} </td>
                 <td>
-                    <a href=" {{route('users.edit', $user->id)}} "><button class=" btn btn-default">Editer</button></a>
+                    <a href=" {{route('users.edit', $user->id)}} "><button class=" btn btn-default"><i class="fas fa-pencil-alt"></i></button></a>
                     <form action="{{route('users.destroy', $user->id)}}" method="post" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                     </form>
                 </td>
             </tr>
