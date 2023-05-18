@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
 class UserController extends Controller
 {
     public function __construct()
@@ -40,6 +42,10 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $role)
     {
+        if(Gate::denies('edit-users')){
+            return redirect()->route('users.index');
+        }
+
         $roles = role::all();
         return view('users.edit', compact(['user', 'roles']));
     }
@@ -56,6 +62,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if(Gate::denies('delete-users')){
+            return redirect()->route('users.index');
+        }
         $user->roles()->detach();
         $user->delete();
         return redirect()->route('users.index');
