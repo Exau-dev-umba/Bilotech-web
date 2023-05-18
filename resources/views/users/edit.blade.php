@@ -23,7 +23,13 @@
                                 <label for="{{$role->id}}" class="form-check-label">  {{$role->name}} </label>
                             </div>
                         @endforeach
-                            <button type="submit" class="btn btn-default">Modifier les rôles</button>
+                            
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-outline-primary">Modifier les rôles</button>
+                             </div>
+                            <div class="text-right mx-4">
+                                <a class="btn btn-outline-success fas fa-arrow-alt-circle-left " href="{{ route('users.index') }}"> Retour</a>
+                             </div>
                         </form>
                     </div>
                 </div>
