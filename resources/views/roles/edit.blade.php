@@ -53,7 +53,7 @@
      </div>
      <div class="text-right mx-4">
         <a class="btn btn-outline-success fas fa-arrow-alt-circle-left " href="{{ route('roles.index') }}"> Retour</a>
-    </div>
+     </div>
     </div>
  </div>
 @endsection
