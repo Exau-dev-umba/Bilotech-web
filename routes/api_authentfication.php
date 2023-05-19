@@ -20,21 +20,25 @@ use App\Http\Controllers\Api\AuthController;
 
 
 Route::post('/login', function (Request $request) {
-   
+
     $user = User::where('email', $request->email)->first();
- 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-       
-        return response()->json(['message'=>'Email ou mot de passe incorrect']);
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+
+        return response()->json(['message' => 'Email ou mot de passe incorrect']);
     }
     $token = $user->createToken($request->email)->plainTextToken;
-    
-    return response()->json(['user'=>$user, 'token'=>$token]);
+
+    return response()->json(['user' => $user, 'token' => $token]);
 });
 
-Route::post('/register', [AuthController::class,'register']);
+Route::post('/register', [AuthController::class, 'register']);
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
+    /*Route of user*/
+    Route::get('/user', [AuthController::class, 'user']);
+    // Route of user logout
+    Route::post('/logout', [AuthController::class, 'logout']);
 
-
-
+});

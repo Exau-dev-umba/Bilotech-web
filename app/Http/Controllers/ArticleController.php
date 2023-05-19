@@ -19,7 +19,6 @@ class ArticleController extends Controller
         $perPage = 10; // Nombre d'articles par page
 
         $articles = Article::paginate($perPage);
-       
 
         return response()->json($articles);
     }
