@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Article;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
-use Illuminate\Support\Facades\Request;
+
 
 class ArticleController extends Controller
 {
@@ -16,12 +17,14 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = 10; // Nombre d'articles par page
-
+        $perPage = $request ->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
         $articles = Article::paginate($perPage);
-
+        
         return response()->json($articles);
     }
+
+    
+
 
     /**
      * Show the form for creating a new resource.
