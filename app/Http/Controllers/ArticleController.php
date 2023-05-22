@@ -39,28 +39,32 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        $article = new Article();
-        $article->title = $request->input('title');
-        $article->keyword = $request->input('keyword');
-        $article->content = $request->input('content');
-        $article->country = $request->input('country');
-        $article->city = $request->input('city');
-        $article->price = $request->input('price');
-        $article->similar_ad = $request->input('similar_ad') ;
-        $article->devise = $request->input('devise');
-        $article->user_id = Auth::user()->id;
-        //$imagePath = $request->file('image')->store('images');
-        //$imagePath = $request->photo->storeAs('images', 'filename.jpg', '');
-        
-        // Enregistrez les images associées à l'article
-        // foreach ($request->file('images') as $image) {
-        //     $imagePath = $image->store('images');
 
-        //     $imageModel = new Image();
-        //     $imageModel->article_id = $article->id;
-        //     $imageModel->image_path = $imagePath;
-        //     $imageModel->save();
-        // }
+        $article = Article::create([
+            'title' => $request->input('title'),
+            'keyword' => $request->input('keyword'),
+            'content' => $request->input('content'),
+            'country' => $request->input('country'),
+            'city' => $request->input('city'),
+            'price' => $request->input('price'),
+            'similar_ad' => $request->input('similar_ad'),
+            'devise' => $request->input('devise'),
+            'user_id' => Auth::user()->id
+        
+        ]);
+        
+        if ($request->hasFile('image_path')) {
+
+                foreach ($request->file('image_path') as $image) {
+                    $nameImage = date('ymdhis') . '.' . $image->extension();
+                    $fichier = $image->storeAs('documents', $nameImage, 'public');
+                    $article->images()->create([
+                        'image_path' => $fichier,
+                    ]);
+                }
+        
+        }
+
         if($article->save()){
             return response()->json([
                 'message' => 'Création success',
