@@ -2,24 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Article;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+
 
 class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $perPage = 10; // Nombre d'articles par page
-
+        $perPage = $request ->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
         $articles = Article::paginate($perPage);
-
+        
         return response()->json($articles);
     }
+
+    
+
 
     /**
      * Show the form for creating a new resource.
@@ -34,17 +39,32 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        $article = new Article();
-        $article->title = $request->input('title');
-        $article->keyword = $request->input('keyword');
-        $article->content = $request->input('content');
-        $article->country = $request->input('country');
-        $article->city = $request->input('city');
-        $article->price = $request->input('price');
-        $article->similar_ad = $request->input('similar_ad') ;
-        $article->devise = $request->input('devise');
-        $article->user_id = Auth::user()->id;
+
+        $article = Article::create([
+            'title' => $request->input('title'),
+            'keyword' => $request->input('keyword'),
+            'content' => $request->input('content'),
+            'country' => $request->input('country'),
+            'city' => $request->input('city'),
+            'price' => $request->input('price'),
+            'similar_ad' => $request->input('similar_ad'),
+            'devise' => $request->input('devise'),
+            'user_id' => Auth::user()->id
         
+        ]);
+        
+        if ($request->hasFile('image_path')) {
+
+                foreach ($request->file('image_path') as $image) {
+                    $nameImage = date('ymdhis') . '.' . $image->extension();
+                    $fichier = $image->storeAs('documents', $nameImage, 'public');
+                    $article->images()->create([
+                        'image_path' => $fichier,
+                    ]);
+                }
+        
+        }
+
         if($article->save()){
             return response()->json([
                 'message' => 'Création success',
