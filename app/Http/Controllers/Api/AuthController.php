@@ -34,6 +34,7 @@ class AuthController extends Controller
             $users->name = $request->name;
             $users->email = $request->email;
             $users->image = $image;
+            $users->telephone = $request->telephone;
             $users->password = Hash::make($request->password, [
                 "rounds" => 12
             ]);
