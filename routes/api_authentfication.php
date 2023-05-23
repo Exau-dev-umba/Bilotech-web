@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,6 +29,7 @@ Route::post('/login', function (Request $request) {
         return response()->json(['message' => 'Email ou mot de passe incorrect']);
     }
     $token = $user->createToken($request->email)->plainTextToken;
+    $user = new UserResource($user);
 
     return response()->json(['user' => $user, 'token' => $token]);
 });
