@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ImageController;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 
@@ -40,30 +41,34 @@ class ArticleController extends Controller
     public function store(StoreArticleRequest $request)
     {
 
+        $bodyStr = $request->getContent();
+        $body = json_decode($bodyStr, true);
+      
         $article = Article::create([
-            'title' => $request->input('title'),
-            'keyword' => $request->input('keyword'),
-            'content' => $request->input('content'),
-            'country' => $request->input('country'),
-            'city' => $request->input('city'),
-            'price' => $request->input('price'),
-            'similar_ad' => $request->input('similar_ad'),
-            'devise' => $request->input('devise'),
+            'title' => $body["title"],
+            'keyword' => $body["keyword"],
+            'content' => $body["content"],
+            'country' => $body["country"],
+            'city' => $body["city"],
+            'price' => $body["price"],
+            'devise' => $body["devise"],
             'user_id' => Auth::user()->id
         
-        ]);
-        
-        if ($request->hasFile('image_path')) {
+        ]); 
+           
+    
 
-                foreach ($request->file('image_path') as $image) {
-                    $nameImage = date('ymdhis') . '.' . $image->extension();
-                    $fichier = $image->storeAs('documents', $nameImage, 'public');
-                    $article->images()->create([
-                        'image_path' => $fichier,
-                    ]);
-                }
-        
+        if ($request->hasFile('image_path')) {
+        foreach ($request->file('image_path') as $image) {
+            $nameImage = date('ymdhis') . '.' . $image->extension();
+            $fichier = $image->storeAs('documents', $nameImage, 'public');
+            
+            // Utiliser la méthode store du contrôleur ImageController
+            $imageController = new ImageController();
+            $imageController->store($fichier, $article->id);
         }
+        
+        
 
         if($article->save()){
             return response()->json([
@@ -82,14 +87,17 @@ class ArticleController extends Controller
             ], 500);
         }
     }
+}
 
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
-    {
-        return response()->json($article);
-    }
+
+     public function show(Article $article)
+     {
+         return response()->json($article);
+     }
+  
 
     /**
      * Show the form for editing the specified resource.
@@ -100,7 +108,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage.    
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
