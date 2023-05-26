@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Image;
+use App\Models\Article;
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
+use Illuminate\Support\Facades\Request;
 
 class ImageController extends Controller
 {
@@ -27,10 +28,28 @@ class ImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreImageRequest $request)
+    public function store(StoreImageRequest $request, Article $article)
     {
-        //
+
+        if ($request->hasFile('image_path')) {
+
+           
+                foreach ($request->file('image_path') as $image) {
+                    $nameImage = date('ymdhis') . '.' . $image->extension();
+                    $fichier = $image->storeAs('articles', $nameImage, 'public');
+                    
+                    // Utiliser la méthode store du contrôleur ImageController
+                    $article->images()->create([
+                        "image_path" => $fichier
+                    ]);
+                }
+
+            return response()->json(['message' => 'Image enregistrée avec succès'], 201);
+        }
+        
     }
+
+    
 
     /**
      * Display the specified resource.
@@ -61,6 +80,6 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        //
+        
     }
 }
