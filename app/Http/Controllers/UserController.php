@@ -42,9 +42,7 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $role)
     {
-        if(Gate::denies('edit-users')){
-            return redirect()->route('users.index');
-        }
+  
 
         $roles = role::all();
         return view('users.edit', compact(['user', 'roles']));
@@ -56,8 +54,8 @@ class UserController extends Controller
     {
 
         $user->roles()->sync($request->roles);
-        $user->name= $request->name;
-        $user->email= $request->email;
+        // $user->name= $request->name;
+        // $user->email= $request->email;
         $user->save();
         return redirect()->route('users.index');
     }
@@ -66,9 +64,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if(Gate::denies('delete-users')){
-            return redirect()->route('users.index');
-        }
+
         $user->roles()->detach();
         $user->delete();
         return redirect()->route('users.index');
