@@ -21,6 +21,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'image',
+        'telephone',
         'password',
     ];
 
@@ -43,12 +45,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
     public function roles(){
         return $this->belongsToMany('App\Models\Role');
     }
 
     public function hasRole($role)
     {
-        return $this->roles()->where('name', $role)->exists();
+    return $this->roles()->where('name', $role)->exists();
+}
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+
     }
 }

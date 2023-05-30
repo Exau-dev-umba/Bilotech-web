@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ArticleController;
 
 
 /*
@@ -14,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-require ('api_authentfication.php');
-require('api_articles.php');
+Route::post('articles/{article}/image', [ImageController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function(){
+    Route::apiResource('articles', ArticleController::class, ["as" => "api"]);
+});
 
