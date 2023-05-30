@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'price', 'similar_ad', 'devise', 'user_id'];
+    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'price', 'negociation', 'devise', 'user_id'];
 
     public function user()
     {
