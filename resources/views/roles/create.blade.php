@@ -6,8 +6,7 @@
         <div class="float-start">
             <h2>Ajouter un nouveau role</h2>
         </div>
-    </div>
-</div>
+    </div>      
    
 @if ($errors->any())
     <div class="alert alert-danger">
