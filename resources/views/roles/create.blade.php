@@ -6,9 +6,6 @@
         <div class="float-start">
             <h2>Ajouter un nouveau role</h2>
         </div>
-        <div class="float-end">
-            <a class="btn btn-outline-primary" href="{{ route('roles.index') }}"> Retour</a>
-        </div>
     </div>
 </div>
    
@@ -33,7 +30,7 @@
         </div>
         <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Soumettre</button>
+                <button type="submit" class="btn btn-default"><i class="fas fa-save"></i></button>
         </div>
     </div>
    

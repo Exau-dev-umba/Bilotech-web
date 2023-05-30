@@ -1,54 +1,74 @@
 @extends('layouts.app')
 @section('content')
+<section class="content-header">
+    <div class="container-fluid">
+     <div class="row mb-2">
+       <div class="col-sm-6">
+         <h1>Utilisateur <strong> {{$user->name}} </strong></h1>
+       </div>
+       <div class="col-sm-6">
+         <ol class="breadcrumb float-sm-right">
+           <li class="breadcrumb-item"><a href="#">Home</a></li>
+           <li class="breadcrumb-item active">Attribution des rôles</li>
+         </ol>
+       </div>
+     </div>
+    </div><!-- /.container-fluid -->
+ </section>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 mt-3">
+            <div class="col-md-12 mt-3">
                 <div class="card">
-                    <div class="card-header">
-                        Modifier <strong> {{$user->name}} </strong>
-                    </div>
                     <div class="card-body">
                         <form action="{{route('users.update', $user)}}" method="post">
                             @csrf
                             @method('PATCH')
                             <div class="input-group mb-3">
-                                <label for="name" class="col-md-4 col-form-label">Nom</label>
-                                <input type="text" name="name" value="{{ old('email')?? $user->name  }}" placeholder="nom"
-                                    class="form-control @error('name') is-invalid @enderror">
-                                <div class="input-group-append">
-                                    <div class="input-group-text"><span class="fas fa-user"></span></div>
-                                </div>
-                                @error('name')
-                                    <span class="error invalid-feedback">{{ $message }}</span>
-                                @enderror
+                                <label for="name" class="col-md-4 col-form-label">Nom : {{$user->name}}</label>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="email" class="col-md-4 col-form-label">Email</label>
-                                <input type="email" name="email" value="{{ old('email')?? $user->email }}" placeholder="Email"
-                                    class="form-control @error('email') is-invalid @enderror">
-                                <div class="input-group-append">
-                                    <div class="input-group-text"><span class="fas fa-envelope"></span></div>
-                                </div>
-                                @error('email')
-                                    <span class="error invalid-feedback">{{ $message }}</span>
-                                @enderror
+                                <label for="email" class="col-md-4 col-form-label">Email : {{$user->email}}</label>
                             </div>
-                            @foreach ($roles as $role) 
-                            <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" name="roles[]" value=" {{$role->id}} " id="{{$role->id}}"
-                                @if ($user->roles->pluck('id')->contains($role->id)) checked
-                                    
-                                @endif
-                                >
-                                <label for="{{$role->id}}" class="form-check-label">  {{$role->name}} </label>
+                        <div class="row">
+                            <div class="col-12">
+                              <!-- Custom Tabs -->
+                              <div class="card">
+                                <div class="card-header d-flex p-0">
+                                  <h3 class="card-title p-3"></h3>
+                                  <ul class="nav nav-pills ml-auto p-2">
+                                    <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Securité</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Agent</a></li>
+                                  </ul>
+                                </div><!-- /.card-header -->
+                                <div class="card-body">
+                                  <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        @foreach ($roles as $role)
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" class="form-check-input" name="roles[]" value=" {{$role->id}} " id="{{$role->id}}"
+                                            @if ($user->roles->pluck('id')->contains($role->id)) checked
+                                            @endif
+                                            >
+                                            <label for="{{$role->id}}" class="form-check-label">  {{$role->name}} </label>
+                                        </div>
+                                    @endforeach
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="tab_2">
+                                        <a href="#"><strong> {{$user->name}} </strong></a>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <!-- /.tab-pane -->
+                                  </div>
+                                  <!-- /.tab-content -->
+                                </div><!-- /.card-body -->
+                              </div>
+                              <!-- ./card -->
                             </div>
-                        @endforeach
-                            
-                            <div class="float-end">
-                                <button type="submit" class="btn btn-outline-primary">Modifier les informations</button>
-                             </div>
-                            <div class="text-right mx-4">
-                                <a class="btn btn-outline-success fas fa-arrow-alt-circle-left " href="{{ route('users.index') }}"> Retour</a>
+                            <!-- /.col -->
+                          </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-outline-default border"><i class="fas fa-save"></i></button>
                              </div>
                         </form>
                     </div>
@@ -57,3 +77,14 @@
         </div>
     </div>
 @endsection
+
+
+
+
+
+
+
+
+
+
+
