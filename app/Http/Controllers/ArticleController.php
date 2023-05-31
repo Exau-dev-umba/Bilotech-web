@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ImageController;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
-
+use App\Models\Category;
 
 class ArticleController extends Controller
 {
@@ -38,7 +38,7 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreArticleRequest $request)
+    public function store(StoreArticleRequest $request, Category $category)
     {
 
         $bodyStr = $request->getContent();
@@ -52,23 +52,13 @@ class ArticleController extends Controller
             'city' => $body["city"],
             'price' => $body["price"],
             'devise' => $body["devise"],
+            'negociation' => $body["negociation"],
             'user_id' => Auth::user()->id
         
         ]); 
-           
-    
 
-        if ($request->hasFile('image_path')) {
-        foreach ($request->file('image_path') as $image) {
-            $nameImage = date('ymdhis') . '.' . $image->extension();
-            $fichier = $image->storeAs('documents', $nameImage, 'public');
-            
-            // Utiliser la méthode store du contrôleur ImageController
-            $imageController = new ImageController();
-            $imageController->store($fichier, $article->id);
-        }
         
-        
+
 
         if($article->save()){
             return response()->json([
@@ -86,7 +76,7 @@ class ArticleController extends Controller
 
             ], 500);
         }
-    }
+    
 }
 
     /**
