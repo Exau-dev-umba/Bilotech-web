@@ -17,9 +17,11 @@ use App\Http\Controllers\ArticleController;
 |
 */
 
-Route::get('articles', 'ArticleController@search');
+
+
+Route::get('articles', [ArticleController::class, 'index']);
 Route::post('articles/{id}/images', [ImageController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function(){
-    Route::apiResource('articles', ArticleController::class, ["as" => "api"]);
+    Route::apiResource('articles', ArticleController::class, ["as" => "api"])->except(['index']);
 });
 
