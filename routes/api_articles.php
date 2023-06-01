@@ -16,8 +16,12 @@ use App\Http\Controllers\ArticleController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('articles/{article}/image', [ImageController::class, 'store']);
+
+
+
+Route::get('articles', [ArticleController::class, 'index']);
+Route::post('articles/{id}/images', [ImageController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function(){
-    Route::apiResource('articles', ArticleController::class, ["as" => "api"]);
+    Route::apiResource('articles', ArticleController::class, ["as" => "api"])->except(['index']);
 });
 

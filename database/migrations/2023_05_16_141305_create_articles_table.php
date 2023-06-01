@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
                 $table->id();
                 $table->string('title');
-                $table->string('content');
+                $table->longText('content');
                 $table->string('keyword');
                 $table->string('country');
                 $table->string('city');
-                $table->string('price');
-                $table->string('similar_ad');
+                $table->double('price');
                 $table->string('devise');   
+                $table->boolean('negociation')->default(false);   
                 $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade')->default(0);
                 $table->timestamps();
             });

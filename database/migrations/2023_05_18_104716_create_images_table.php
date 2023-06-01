@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();     
             $table->foreignId('article_id')->constrained()->onDelete('cascade')->onUpdate('cascade')->default(0);
             $table->string('image_path');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }
