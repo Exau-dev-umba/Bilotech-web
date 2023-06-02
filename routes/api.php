@@ -28,3 +28,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('message', MessageController::class);
+Route::resource('conversation',ConversationController::class);
+Route::get('/messages/{id}',[MessageController::class,'listemessage']);
