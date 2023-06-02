@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ArticleResource;
 use App\Http\Controllers\ImageController;
+use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
-
 
 class ArticleController extends Controller
 {
@@ -20,7 +22,14 @@ class ArticleController extends Controller
     {
         $perPage = $request ->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
         $articles = Article::paginate($perPage);
+        $data = new ArticleCollection($articles);
         
+        return response()->json($data);
+    }
+
+    public function search(Request $request){
+        $query = $request->input('query');
+        $articles = Article::where('content', 'LIKE', "%query%")->orWhere('title', 'LIKE', "%$query%")->get();
         return response()->json($articles);
     }
 
@@ -52,29 +61,16 @@ class ArticleController extends Controller
             'city' => $body["city"],
             'price' => $body["price"],
             'devise' => $body["devise"],
+            'negociation' => $body["negociation"],
             'user_id' => Auth::user()->id
         
         ]); 
-           
-    
 
-        if ($request->hasFile('image_path')) {
-        foreach ($request->file('image_path') as $image) {
-            $nameImage = date('ymdhis') . '.' . $image->extension();
-            $fichier = $image->storeAs('documents', $nameImage, 'public');
-            
-            // Utiliser la méthode store du contrôleur ImageController
-            $imageController = new ImageController();
-            $imageController->store($fichier, $article->id);
-        }
-        
-        
 
         if($article->save()){
-            return response()->json([
-                'message' => 'Création success',
-                'data' => $article
-    
+            $data = new ArticleResource($article);
+            return response()->json( [
+                "id" => "$article->id"
             ], 201);
         }
 
@@ -86,7 +82,7 @@ class ArticleController extends Controller
 
             ], 500);
         }
-    }
+    
 }
 
     /**
@@ -95,7 +91,8 @@ class ArticleController extends Controller
 
      public function show(Article $article)
      {
-         return response()->json($article);
+        $data = new ArticleResource($article);
+        return response()->json($data);
      }
   
 
@@ -120,16 +117,12 @@ class ArticleController extends Controller
         $article->country = $request->input('country');
         $article->city = $request->input('city');
         $article->price = $request->input('price');
-        $article->similar_ad = $request->input('similar_ad') ;
         $article->devise = $request->input('devise');
+        $article->negociation = $request->input('negociation') ;
         $article->user_id = Auth::user()->id;
         
         if($article->save()){
-            return response()->json([
-                'message' => 'Modification success',
-                'data' => $article
-    
-            ], 201);
+            return response()->json($article, 200);
         }
 
 
@@ -149,7 +142,7 @@ class ArticleController extends Controller
     {
         $article->delete();
         return response()->json([
-            'message' => 'Article supprimé avec succès!'
+            '', 204
         ]);
     }
 }
