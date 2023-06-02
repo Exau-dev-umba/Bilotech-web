@@ -17,8 +17,7 @@ use App\Http\Controllers\conversationController;
 |
 */
 require ('api_authentfication.php');
-
-
+require('api_articles.php');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

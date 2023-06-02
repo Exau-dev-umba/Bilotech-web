@@ -5,6 +5,7 @@
  */
 
 import './bootstrap';
+
 import { createApp } from 'vue';
 
 /**
@@ -37,3 +38,10 @@ app.component('example-component', ExampleComponent);
  */
 
 app.mount('#app');
+
+import 'admin-lte';
+import.meta.glob([
+    '../images/**',
+    '../fonts/**',
+  ]);
+

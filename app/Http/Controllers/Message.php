@@ -13,8 +13,7 @@ use App\Repository\MessageRepository;
 use App\Http\Resources\MessageResource;
 use App\Models\ConversationModel;
 
-class 
-MessageController extends Controller
+class Messages extends Controller
 {
     private $r;
     private $auth;
@@ -31,26 +30,26 @@ MessageController extends Controller
        /*return view('conversations/index',[
             'users'=> $this->r->getConversations($this->auth->user()->id)
         ]);*/
-        $Messages= MessageResource::collection(MessageModel::paginate(10));
+        $Messages= MessageResource::collection(Message::paginate(10));
     return response()->json($Messages);
 
     }
 
     public function show (Request $request, $id){
 
-        $message= new MessageResource(MessageModel::find($id));
+        $message= new MessageResource(Message::find($id));
         return response()->json($message);
 
 
     }
     public function listemessage($id){
         //$conversation  = MessageResource::collection(MessageModel::find($id));
-        $conversation= MessageModel::findOrFail($id);
+        $conversation= Message::findOrFail($id);
         //$conversation = new MessageResource()
         return response()->json($conversation);
     }
     public function store( Request $request){
-        $message= MessageModel::create([
+        $message= Message::create([
             'conversation_id'=>$request->conversation_id,
             'content'=>$request->content,
            // "from_id" => 1 // TODO: remplacer par le user connecté
@@ -60,13 +59,13 @@ MessageController extends Controller
     }
 
     public function update(Request $request, $id){
-        $Message= MessageModel::find($id)->update([
+        $Message= Message::find($id)->update([
             'conversation_id'=>$request->name,
             'content'=>$request->article_id,
            // "from_id"=>4
         ]);
         if($Message):
-            $result = MessageModel::find($id);
+            $result = Message::find($id);
             $Message = new MessageResource($result);
             return response()->json($Message);
         else:

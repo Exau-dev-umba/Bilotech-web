@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ConversationModel extends Model
+class Message extends Model
 {
-    protected $table = 'conversations';
+    protected $table = 'messages';
     protected $fillable = [
-        'article_id',
-        'user_id',
+        'conversation_id',
+        'content',
         
     ];
+
     public $timestamps= true;
-    protected $dates = ['created_at','read_at']; 
-    
-    use HasFactory;
+
+    protected $dates = ['created_at','read_at'];
 }
