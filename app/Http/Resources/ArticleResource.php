@@ -19,7 +19,7 @@ class ArticleResource extends JsonResource
             "title" => $this->title,
             "keyword" => $this->keyword,
             "content" => $this->content,
-            "city" => $this->price,
+            "city" => $this->city,
             "price" => $this->price,
             "devise" => $this->devise,
             "negociation" => $this->negociation,
