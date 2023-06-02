@@ -16,8 +16,9 @@ class MessageResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'conversation_id'=>new ConversationResource($this->conversation_id),
+            'conversation_id'=>$this->conversation_id,
             'content'=>$this->content,
+            'user_id'=>$this->user_id,
             'date'=>$this->created_at
         ];
     }

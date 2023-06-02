@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ConversationResource;
 use App\Models\User;
 use App\Models\Message;
-use App\Models\MessageModel;
 use Illuminate\Http\Request;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Auth;
 use App\Repository\MessageRepository;
 use App\Http\Resources\MessageResource;
-use App\Models\ConversationModel;
 
-class Messages extends Controller
+class MessageController extends Controller
 {
     private $r;
     private $auth;
@@ -49,11 +47,14 @@ class Messages extends Controller
         return response()->json($conversation);
     }
     public function store( Request $request){
-        $message= Message::create([
+        $data=[
             'conversation_id'=>$request->conversation_id,
             'content'=>$request->content,
+            'user_id'=> Auth::user()->id
            // "from_id" => 1 // TODO: remplacer par le user connecté
-        ]);
+        ];
+        //dd($data);
+        $message= Message::create($data);
         $Message = new  MessageResource($message);
         return response()->json($Message);
     }

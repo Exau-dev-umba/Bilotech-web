@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('messages', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
-            $table->string('content');
-            $table->timestamps();
+        Schema::table('messages', function (Blueprint $table) {
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->default(0);
         });
     }
-   
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('messages');
+        Schema::table('messages', function (Blueprint $table) {
+            //
+        });
     }
 };

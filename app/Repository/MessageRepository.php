@@ -5,7 +5,6 @@ namespace App\Repository;
 use Carbon\Carbon;
 
 use App\Models\Message;
-use App\Models\MessageModel;
 use Illuminate\Foundation\Auth\User;
 
 class MessageRepository{
@@ -14,7 +13,7 @@ class MessageRepository{
     private $user;
     private $message;
 
-    public function __construct(User $user, MessageModel $message)
+    public function __construct(User $user, Message $message)
     {
         $this->user= $user;
         $this->message=$message;
