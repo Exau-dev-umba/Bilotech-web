@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ConversationModel;
+
 use App\Repository\ConversationRepository;
 use Illuminate\Http\Request;
 use App\Http\Resources\ConversationResource;
 use App\Models\Conversation;
 use Illuminate\Auth\AuthManager;
 
-class Conversations extends Controller
+class ConversationController extends Controller
 {private $r;
     private $auth;
 

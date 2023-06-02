@@ -2,13 +2,13 @@
 
 namespace App\Repository;
 
+use App\Models\Conversation;
 use Carbon\Carbon;
 
 use App\Models\Message;
 
 use Illuminate\Foundation\Auth\User;
 use Ramsey\Uuid\Type\Integer;
-use App\Models\ConversationModel;
 
 class ConversationRepository{
 
@@ -16,7 +16,7 @@ class ConversationRepository{
     private $article_id;
    private $conversation;
 
-    public function __construct(User $article_id, ConversationModel $Conversation)
+    public function __construct(User $article_id, Conversation $Conversation)
     {
         $this->article_id= $article_id;
       //  $this->user_id=$message;
