@@ -22,17 +22,16 @@ class ArticleController extends Controller
     {
         $perPage = $request ->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
         $articles = Article::paginate($perPage);
-
         $data = new ArticleCollection($articles);
         
         return response()->json($data);
     }
 
-    // public function search(Request $request){
-    //     $query = $request->input('query');
-    //     $articles = Article::where('title', 'LIKE', "%query%")->orWhere('content', 'LIKE', "%$query%")->get();
-    //     return response()->json($articles);
-    // }
+    public function search(Request $request){
+        $query = $request->input('query');
+        $articles = Article::where('content', 'LIKE', "%query%")->orWhere('title', 'LIKE', "%$query%")->get();
+        return response()->json($articles);
+    }
 
     
 
@@ -48,7 +47,7 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreArticleRequest $request, Category $category)
+    public function store(StoreArticleRequest $request)
     {
 
         $bodyStr = $request->getContent();
@@ -66,8 +65,6 @@ class ArticleController extends Controller
             'user_id' => Auth::user()->id
         
         ]); 
-
-        
 
 
         if($article->save()){
