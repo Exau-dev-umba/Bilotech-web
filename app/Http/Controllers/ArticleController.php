@@ -69,7 +69,9 @@ class ArticleController extends Controller
 
         if($article->save()){
             $data = new ArticleResource($article);
-            return response()->json($article->id, 201);
+            return response()->json( [
+                "id" => "$article->id"
+            ], 201);
         }
 
 
