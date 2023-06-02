@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,11 @@ Route::get('/', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
+
+Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('checkaccess:Role');
+Route::post("roles/modify/{roleId}", [App\Http\Controllers\RoleController::class,'modify'])->name('roles.modify');
+
+Route::delete("roles/alter/{roleId}", [App\Http\Controllers\RoleController::class,'alter'])->name('roles.alter');
+
+
+Route::resource('users', App\Http\Controllers\UserController::class)->middleware('checkaccess:User');
