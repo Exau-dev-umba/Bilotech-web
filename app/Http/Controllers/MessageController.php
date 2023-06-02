@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ConversationResource;
 use App\Models\User;
 use App\Models\Message;
 use App\Models\MessageModel;
@@ -10,7 +11,7 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Auth;
 use App\Repository\MessageRepository;
 use App\Http\Resources\MessageResource;
-use App\Http\Resources\ConversationResource;
+use App\Models\ConversationModel;
 
 class 
 MessageController extends Controller
@@ -30,7 +31,7 @@ MessageController extends Controller
        /*return view('conversations/index',[
             'users'=> $this->r->getConversations($this->auth->user()->id)
         ]);*/
-        $Messages= MessageResource::collection(MessageModel::paginate(4));
+        $Messages= MessageResource::collection(MessageModel::paginate(10));
     return response()->json($Messages);
 
     }
@@ -42,11 +43,17 @@ MessageController extends Controller
 
 
     }
+    public function listemessage($id){
+        //$conversation  = MessageResource::collection(MessageModel::find($id));
+        $conversation= MessageModel::findOrFail($id);
+        //$conversation = new MessageResource()
+        return response()->json($conversation);
+    }
     public function store( Request $request){
         $message= MessageModel::create([
+            'conversation_id'=>$request->conversation_id,
             'content'=>$request->content,
-            'article_id'=>$request->article_id,
-            "from_id" => 1 // TODO: remplacer par le user connecté
+           // "from_id" => 1 // TODO: remplacer par le user connecté
         ]);
         $Message = new  MessageResource($message);
         return response()->json($Message);
@@ -54,9 +61,9 @@ MessageController extends Controller
 
     public function update(Request $request, $id){
         $Message= MessageModel::find($id)->update([
-            'content'=>$request->name,
-            'article_id'=>$request->article_id,
-            "from_id"=>4
+            'conversation_id'=>$request->name,
+            'content'=>$request->article_id,
+           // "from_id"=>4
         ]);
         if($Message):
             $result = MessageModel::find($id);

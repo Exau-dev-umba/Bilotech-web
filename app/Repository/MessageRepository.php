@@ -28,12 +28,11 @@ class MessageRepository{
 
     }
 
-    public function createMessage(string $content, int $from, int $to){
+    public function createMessage(int $conversation_id, int $content,){
 
         return $this->message->newQuery()->create([
-            'content' =>$content,
-            'from_id'=>$from,
-            'to_id'=>$to,
+            'conversation_id' =>$conversation_id,
+            'content'=>$content,
             'created_at'=>Carbon::now()
         ]);
 

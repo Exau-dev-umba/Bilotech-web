@@ -7,16 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class MessageModel extends Model
 {
-    protected $table = 'message';
+    protected $table = 'messages';
     protected $fillable = [
+        'conversation_id',
         'content',
-        'from_id',
-        'article_id',
-        'read_at',
-        'created_at',
+        
     ];
 
-    public $timestamps= false;
+    public $timestamps= true;
 
     protected $dates = ['created_at','read_at'];
 }
