@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\Article;
+use Spatie\FlareClient\Http\Response;
+use Illuminate\Support\Facades\Request;
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
-use Illuminate\Support\Facades\Request;
 
 class ImageController extends Controller
 {
@@ -28,7 +29,7 @@ class ImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreImageRequest $request, Article $article)
+    public function store(StoreImageRequest $request, Article $id)
     {
 
         if ($request->hasFile('image_path')) {
@@ -39,12 +40,12 @@ class ImageController extends Controller
                     $fichier = $image->storeAs('articles', $nameImage, 'public');
                     
                     // Utiliser la méthode store du contrôleur ImageController
-                    $article->images()->create([
+                    $id->images()->create([
                         "image_path" => $fichier
                     ]);
                 }
 
-            return response()->json(['message' => 'Image enregistrée avec succès'], 201);
+            return response('', 201);
         }
         
     }
