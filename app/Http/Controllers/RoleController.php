@@ -3,7 +3,9 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+
 class RoleController extends Controller
 {
     /**
@@ -50,6 +52,7 @@ class RoleController extends Controller
     public function show($id)
     {
         $role = Role::where('id', $id)->firstOrFail();
+   
         $users = $role->users()->get();
         $policies = DB::select('select * from role_police where role_id = ?', [$id]);
         $actions = ['create', 'read', 'update', 'delete'];
@@ -101,22 +104,30 @@ class RoleController extends Controller
     }
     public function modify(Request $request, $roleId)
     {
-        DB::table('role_police')->where('role_id', '=', $roleId)->delete();
-        $form = $request->form;
-        $newTable = [];
-        if ($form != null) {
-            foreach ($form as $key => $value) {
-                $table = explode('_', $key);
-                $newTable[0] = $table[0];
-                $newTable[1] = $table[1];
-                DB::insert('insert into role_police(role_id, model, action) values(?, ?, ?)', [
-                    $request->role_id, $newTable[0], $newTable[1],
-                ]);
+            $role = DB::table('roles')
+            ->join('role_user', 'roles.id', '=', 'role_user.role_id')
+            ->where('role_user.user_id', '=', Auth::user()->id)
+            ->value('roles.name');
+        if ($role == 'admin') {
+            DB::table('role_police')->where('role_id', '=', $roleId)->delete();
+            $form = $request->form;
+            $newTable = [];
+            if ($form != null) {
+                foreach ($form as $key => $value) {
+                    $table = explode('_', $key);
+                    $newTable[0] = $table[0];
+                    $newTable[1] = $table[1];
+                    DB::insert('insert into role_police(role_id, model, action) values(?, ?, ?)', [
+                        $request->role_id, $newTable[0], $newTable[1],
+                    ]);
+                }
+            } else {
+                return redirect()->route('roles.show', $request->role_id)->with('error', 'Veuillez cocher au moins une case.');
             }
+            return redirect()->route('roles.show', $request->role_id);
         } else {
-            return redirect()->route('roles.show', $request->role_id)->with('error', 'Veillez cochet au moins une case ');
+            return redirect()->back()->with('error', 'Vous n\'êtes pas autorisé à effectuer cette opération.');
         }
-        return redirect()->route('roles.show', $request->role_id);
     }
     /**
      * Remove the specified resource from storage.

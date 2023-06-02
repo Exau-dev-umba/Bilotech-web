@@ -30,25 +30,27 @@
                     </tr>
                 </thead>
                     <tbody>
-                        @foreach ($users as $user)
-                        <tr>
-                        <td> {{$user->name }} </td>
-                        <td> {{$user->email }} </td>
-                        <td> {{ implode(',' , $user->roles()->get()->pluck('name')->toArray()) }} </td>
-                        {{-- @can('manage-users') --}}
-                        <td>
-                            <a href=" {{route('users.edit', $user->id)}} "><button class=" btn btn-default"><i class="fas fa-pencil-alt"></i></button></a>
-                            
-                            <form action="{{route('users.destroy', $user->id)}}" method="post" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                            </form>
-                            
-                        </td>
-                        {{-- @endcan --}}
-                    </tr>
-                    @endforeach
+                      @foreach ($users as $user)
+                      @if (!$user->hasRole('admin'))
+                          <tr>
+                              <td> {{$user->name }} </td>
+                              <td> {{$user->email }} </td>
+                              <td> {{ implode(',' , $user->roles()->get()->pluck('name')->toArray()) }} </td>
+                              {{-- @can('manage-users') --}}
+                              <td>
+                                  <a href=" {{route('users.edit', $user->id)}} "><button class=" btn btn-default"><i class="fas fa-pencil-alt"></i></button></a>
+                                  
+                                  <form action="{{route('users.destroy', $user->id)}}" method="post" class="d-inline">
+                                      @csrf
+                                      @method('DELETE')
+                                      <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                  </form>
+                                  
+                              </td>
+                              {{-- @endcan --}}
+                          </tr>
+                      @endif
+                  @endforeach
                     </tbody>
             </table>
         </div>

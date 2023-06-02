@@ -12,13 +12,13 @@
         <p>Roles</p>
     </a>
 </li>
-
+@permission('read', 'User')
 <li class="nav-item">
     <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('users.index') ? 'active' : '' }}">
         <i class="nav-icon fas fa-users"></i>
         <p>Liste des utlisateurs</p>
     </a>
 </li>  
-
+@endpermission
 
 

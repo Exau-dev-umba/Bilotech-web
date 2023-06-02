@@ -43,21 +43,17 @@
                          </td>
                          @foreach ($actions as $action)
                          <td class="">
-
-                        @php
-                        $verify =  DB::select('select * from role_police where role_id = ? and model = ? and action = ? ', [$role->id, $model, $action] );
-
-                        
- 
-                        @endphp
-                        @if ($verify)
-                        <i class="fas fa-check"></i>
-                        @else
-                        <i class="fas fa-circle gray"></i>
-                        
-                        @endif       
-
+                             @php
+                                 $verify = DB::select('select * from role_police where role_id = ? and model = ? and action = ? ', [$role->id, $model, $action]);
+                             @endphp
+                         
+                             @if ($verify || $role=="admin")
+                                 <i class="fas fa-check"></i>
+                             @else
+                                 <i class="fas fa-circle gray"></i>
+                             @endif
                          </td>
+                         
                          @endforeach
                        
          

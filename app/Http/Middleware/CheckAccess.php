@@ -1,12 +1,7 @@
 <?php
-
 namespace App\Http\Middleware;
-
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
-
 class CheckAccess
 {
     /**
@@ -14,17 +9,11 @@ class CheckAccess
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-
     public function handle($request, \Closure $next, $model)
     {
-        // Récupérer la route actuelle
-        $route = request()->route();
 
-
-        // Mapper l'action de la base de données au verbe HTTP standard
-
-        if (!Gate::allows('access',  $model)) {
-            return response('Vous n\'avez pas les autorisations nécessaires pour accéder à cette ressource.', 403);
+        if (!Gate::allows('access', $model)) {
+            abort(403, 'Vous n\'avez pas les autorisations nécessaires pour accéder à cette ressource.');
         }
         return $next($request);
     }

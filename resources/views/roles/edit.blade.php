@@ -45,7 +45,9 @@
                            $verify =  DB::select('select * from role_police where role_id = ? and model = ? and action = ? ', [$role->id, $model, $action] );
                            @endphp
                            @if ($verify)
+                           @if (auth()->user()->hasRole('admin'))
                            checked
+                           @endif
                            @else
                            @endif
                              name="form[{{$model.'_'.$action}}]"  class="justify-center" spellcheck="false">
