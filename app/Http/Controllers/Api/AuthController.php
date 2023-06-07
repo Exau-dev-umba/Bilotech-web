@@ -46,12 +46,12 @@ class AuthController extends Controller
                 "rounds" => 12
             ]);
             $users->save();
+            $token = $users->createToken($request->email)->plainTextToken;
             $users = new UserResource($users);
             return response()->json([
-                "status_code" => "200",
-                "status_message" => "Operation de creation d'Utilisateur reussi",
-                "user" => $users
-            ]);
+                "user" => $users,
+                'token'=> $token
+            ],201);
         } catch (Exception $e) {
             return response()->json($e);
         }
@@ -65,6 +65,9 @@ class AuthController extends Controller
             'message' => "Au revoir"
         ], 200);
     }
+
+    //Update user
+    public function updateUser(){}
     //Single user
     public function user()
     {
