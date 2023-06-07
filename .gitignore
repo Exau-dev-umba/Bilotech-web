@@ -19,4 +19,4 @@ yarn-error.log
 /.vscode
 .editorconfig
 /storage/*.log
-/storage/api-docs
+package-log.json
