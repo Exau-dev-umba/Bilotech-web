@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+
+use Illuminate\Support\Facades\Schema;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
 
 
 
@@ -60,5 +65,8 @@ class AppServiceProvider extends ServiceProvider
                 return false; // l'utilisateur n'a pas les autorisations nécessaires
             }
         });
+
+        Schema::defaultStringLength(191);
+
     }
 }
