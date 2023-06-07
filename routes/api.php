@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 require ('api_authentfication.php');
 require('api_articles.php');
+require('api_preference.php');
 
