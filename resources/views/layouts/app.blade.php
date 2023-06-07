@@ -4,6 +4,8 @@
         <div class="wrapper">
             <!-- Main Header -->
 
+<<<<<<< HEAD
+=======
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
@@ -46,6 +48,7 @@
                 </ul>
             </nav>
 
+>>>>>>> d476f2f13239f832fca1ec351d8b0aa50b6e6246
             @include('layouts.header')
 
 
