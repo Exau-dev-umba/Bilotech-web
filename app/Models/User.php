@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Preference;
+
 use App\Models\Role;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\File;
+
 
 class User extends Authenticatable
 {
@@ -77,5 +81,8 @@ class User extends Authenticatable
                 $user->roles()->attach(Role::where('name', 'user')->first());
             }
         });
+    }
+    public function preferences(){
+        return $this->belongsToMany(Preference::class, 'preference_user', 'user_id', 'preference_id')->withTimestamps();
     }
 }

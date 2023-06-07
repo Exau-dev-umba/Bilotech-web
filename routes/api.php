@@ -19,6 +19,7 @@ use App\Http\Controllers\MessageController;
 */
 require ('api_authentfication.php');
 require('api_articles.php');
+require('api_preference.php');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
    // return $request->user();
