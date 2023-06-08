@@ -62,6 +62,7 @@ class ArticleController extends Controller
             'price' => $body["price"],
             'devise' => $body["devise"],
             'negociation' => $body["negociation"],
+            'category_id' => $body["category_id"],
             'user_id' => Auth::user()->id
         
         ]); 
@@ -119,6 +120,7 @@ class ArticleController extends Controller
         $article->price = $request->input('price');
         $article->devise = $request->input('devise');
         $article->negociation = $request->input('negociation') ;
+        $article->category_id = $request->input('category_id') ;
         $article->user_id = Auth::user()->id;
         
         if($article->save()){
