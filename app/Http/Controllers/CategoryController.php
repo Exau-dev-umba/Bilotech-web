@@ -62,7 +62,7 @@ class CategoryController extends Controller
         ]);
 
         $category->update($request->all());
-        return redirect()->back()->with('success', 'La catégorie a été modifié avec succès.');
+        return redirect()->back('category.index')->with('success', 'La catégorie a été modifié avec succès.');
     }
 
     /**
