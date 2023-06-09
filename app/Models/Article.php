@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'price', 'negociation', 'devise', 'user_id'];
+    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'price', 'negociation',  'category_id' ,'devise', 'user_id'];
 
     public function user()
     {
@@ -19,4 +19,11 @@ class Article extends Model
     public function images(){
         return $this->hasMany(Image::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    
+    
 }

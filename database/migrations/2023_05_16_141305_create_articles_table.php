@@ -21,6 +21,7 @@ return new class extends Migration
                 $table->double('price');
                 $table->string('devise');   
                 $table->boolean('negociation')->default(false);   
+                $table->unsignedBigInteger('category_id');
                 $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade')->default(0);
                 $table->timestamps();
             });
