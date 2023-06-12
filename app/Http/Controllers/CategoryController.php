@@ -11,7 +11,19 @@ use App\Http\Requests\UpdateCategoryRequest;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/categories",
+     *     summary="Obtenir la liste des catégories",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Succès - Liste des catégories",
+     *    
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
      */
     public function index()
     {
@@ -19,16 +31,33 @@ class CategoryController extends Controller
         return view('category.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    
     public function create()
     {
         //
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/categories",
+     *     summary="Créer une nouvelle catégorie",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données de la catégorie",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="category_name", type="string"),
+     *             @OA\Property(property="parent_id", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Catégorie créée avec succès"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -51,8 +80,40 @@ class CategoryController extends Controller
         //
     }
 
+    
+
     /**
-     * Show the form for editing the specified resource.
+     * @OA\Put(
+     *     path="/categories/{category}",
+     *     summary="Mettre à jour une catégorie",
+     *     @OA\Parameter(
+     *         name="category",
+     *         in="path",
+     *         description="Identifiant de la catégorie",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données de la catégorie",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="category_name", type="string"),
+     *             @OA\Property(property="parent_id", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Catégorie mise à jour avec succès"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Catégorie non trouvée"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
      */
     public function update(Category $category, Request $request)
     {

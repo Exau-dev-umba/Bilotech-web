@@ -15,9 +15,35 @@ use App\Http\Requests\UpdateArticleRequest;
 
 class ArticleController extends Controller
 {
+        
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/articles",
+     *     summary="Récupérer la liste des articles",
+     *     @OA\Parameter(
+     *         name="perPage",
+     *         in="query",
+     *         description="Nombre d'articles par page",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=10)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Succès - Liste des articles récupérée",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="current_page", type="integer"),
+     *             @OA\Property(property="per_page", type="integer"),
+     *             @OA\Property(property="total", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
      */
+
     public function index(Request $request)
     {
         $perPage = $request ->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
@@ -26,6 +52,28 @@ class ArticleController extends Controller
         
         return response()->json($data);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/articles/search",
+     *     summary="Rechercher des articles",
+     *     @OA\Parameter(
+     *         name="query",
+     *         in="query",
+     *         description="Terme de recherche",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Succès - Liste des articles correspondant à la recherche",   
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
+     */
 
     public function search(Request $request){
         $query = $request->input('query');
@@ -44,8 +92,30 @@ class ArticleController extends Controller
         //
     }
 
-    /**
+        /**
      * Store a newly created resource in storage.
+     */
+
+    /**
+     * @OA\Post(
+     *     path="/articles",
+     *     summary="Créer un nouvel article",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données de l'article",
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Article créé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
      */
     public function store(StoreArticleRequest $request)
     {
@@ -85,11 +155,27 @@ class ArticleController extends Controller
         }
     
 }
-
-    /**
-     * Display the specified resource.
+     /**
+     * @OA\Get(
+     *     path="/articles/{article}",
+     *     summary="Récupérer un article par son identifiant",
+     *     @OA\Parameter(
+     *         name="article",
+     *         in="path",
+     *         description="Identifiant de l'article",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Succès - Article récupéré",        
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Article non trouvé"
+     *     )
+     * )
      */
-
      public function show(Article $article)
      {
         $data = new ArticleResource($article);
@@ -105,8 +191,36 @@ class ArticleController extends Controller
         //
     }
 
+    
     /**
-     * Update the specified resource in storage.    
+     * @OA\Put(
+     *     path="/articles/{article}",
+     *     summary="Mettre à jour un article",
+     *     @OA\Parameter(
+     *         name="article",
+     *         in="path",
+     *         description="Identifiant de l'article",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données de l'article",
+     *        
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Article mis à jour avec succès",   
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Article non trouvé"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne du serveur"
+     *     )
+     * )
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
@@ -137,8 +251,26 @@ class ArticleController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
+     /**
+     * @OA\Delete(
+     *     path="/articles/{article}",
+     *     summary="Supprimer un article",
+     *     @OA\Parameter(
+     *         name="article",
+     *         in="path",
+     *         description="Identifiant de l'article",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Article supprimé avec succès"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Article non trouvé"
+     *     )
+     * )
      */
     public function destroy(Article $article)
     {
