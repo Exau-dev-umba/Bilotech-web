@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 use App\Models\Image;
 use App\Models\Article;
+use App\Http\Controllers\Controller;
 use Spatie\FlareClient\Http\Response;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\StoreImageRequest;
@@ -34,15 +35,13 @@ class ImageController extends Controller
 
         if ($request->hasFile('image_path')) {
 
-           
                 foreach ($request->file('image_path') as $image) {
-                    $nameImage = date('ymdhis') . '.' . $image->extension();
+                    $nameImage =  microtime(true) .'.' . $image->extension();
                     $fichier = $image->storeAs('articles', $nameImage, 'public');
-                    
+                    $newImage = new Image();
+                    $newImage->image_path = $fichier;
                     // Utiliser la méthode store du contrôleur ImageController
-                    $id->images()->create([
-                        "image_path" => $fichier
-                    ]);
+                    $id->images()->save($newImage);
                 }
 
             return response('', 201);
