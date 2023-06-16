@@ -66,10 +66,16 @@ class AuthController extends Controller
         ], 200);
     }
     //Single user
-    public function user()
+    public function singleUser()
     {
         return response([
             'user' => auth()->user()
+        ]);
+    }
+
+    public function allUser(){
+        return response()->json([
+            'allUser'=> User::all()
         ]);
     }
 
