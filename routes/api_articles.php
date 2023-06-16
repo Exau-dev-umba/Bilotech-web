@@ -21,6 +21,7 @@ use App\Http\Controllers\CategoryController;
 
 
 Route::get('articles', [ArticleController::class, 'index']);
+Route::get('articles/{article}/similar', [ArticleController::class, 'similar']);
 Route::get('articles/{article}', [ArticleController::class, 'show']);
 Route::get('articles/search', [ArticleController::class, 'search']);
 Route::get('categories', [CategoryController::class, 'index']);
