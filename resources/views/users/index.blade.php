@@ -31,7 +31,7 @@
                 </thead>
                     <tbody>
                       @foreach ($users as $user)
-                      @if (!$user->hasRole('admin'))
+                      @if (!$user->hasRole(['admin']))
                           <tr>
                               <td> {{$user->name }} </td>
                               <td> {{$user->email }} </td>
