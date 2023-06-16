@@ -32,6 +32,7 @@ class StoreArticleRequest extends FormRequest
             "city" =>['required'] ,
             "price" => ['required', 'integer'],
             "devise" => ['required'],
+            "category_id" => ['required'],
             "negociation" => ['required'],
             
             

@@ -37,10 +37,13 @@ Route::post('/login', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
+    Route::get('/allUser',[AuthController::class,'allUser']);
     /*Route of user*/
-    Route::get('/singleUser', [AuthController::class, 'user']);
+
     Route::get('/userUpdate', [AuthController::class, 'updateUser']);
+
+    Route::get('/singleUser', [AuthController::class, 'singleUser']);
+
     // Route of user logout
     Route::post('/logout', [AuthController::class, 'logout']);
 

@@ -16,8 +16,12 @@ use App\Http\Controllers\Api\PreferenceController;
 */
 
 
-Route::post('users/preferences', [PreferenceController::class, 'ajoutPreferences']);
+
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('users/preferences', [PreferenceController::class, 'ajoutPreferences']);
+
     Route::get('users/preferences', [PreferenceController::class, 'recuperePreferences']);
     Route::put('users/preferences', [PreferenceController::class, 'modifiePreferences']);
 

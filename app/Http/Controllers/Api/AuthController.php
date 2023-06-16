@@ -69,10 +69,16 @@ class AuthController extends Controller
     //Update user
     public function updateUser(){}
     //Single user
-    public function user()
+    public function singleUser()
     {
         return response([
             'user' => auth()->user()
+        ]);
+    }
+
+    public function allUser(){
+        return response()->json([
+            'allUser'=> User::all()
         ]);
     }
 

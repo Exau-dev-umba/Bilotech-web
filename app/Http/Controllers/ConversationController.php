@@ -33,7 +33,7 @@ class ConversationController extends Controller
     public function show (Request $request, $id){
 
         $Conversation= new ConversationResource(Conversation::find($id));
-        return response()->json($Conversation);
+        return response($Conversation)->json();
 
 
     }
