@@ -4,6 +4,11 @@
         <div class="wrapper">
             <!-- Main Header -->
 
+
+
+        
+
+
             @include('layouts.header')
 
 
@@ -21,5 +26,6 @@
             <!-- Main Footer -->
             @include('layouts.footer')
         </div>
+        @yield('scripts')
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>
