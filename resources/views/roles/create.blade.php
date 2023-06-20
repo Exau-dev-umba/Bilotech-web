@@ -1,37 +1,29 @@
-@extends('layouts.app')
-  
-@section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="float-start">
-            <h2>Ajouter un nouveau role</h2>
-        </div>
-    </div>      
-   
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Oups! </strong> Il y a eu des problèmes avec votre entrée.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-   
-<form action="{{ route('roles.store') }}" method="POST">
-    @csrf
-        <div class="col-xs-6 col-sm-6 col-md-6">
-            <div class="form-group">
-                <strong>Libellé:</strong>
-                <input type="text" name="name" class="form-control" placeholder="Saisir un libellé">
+
+<div>
+    @extends('layouts.modal')
+
+    @section('id_modal')
+        id="create_modal"
+    @endsection
+
+    @section('modal-title')
+        <h4 class="modal-title">Ajouter d'un nouveau role</h4>
+    @endsection
+    @section('modal-content')
+        <form class="form-horizontal" action="{{ route('roles.store') }}" method="POST">
+            @csrf
+            <div class="card-body">
+                <div class="col-xm-6">
+                    <div class="form-group">
+                        <label for="name">Role</label>
+                        <input type="text" name="name" class="form-control" placeholder="le nom du role" required>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+            <div class="card-footer">
                 <button type="submit" class="btn btn-default"><i class="fas fa-save"></i></button>
-        </div>
-    </div>
-   
-</form>
-@endsection
+                <button type="reset" class="btn btn-secondary float-right"><i class="fas fa-times-circle"></i></button>
+            </div>
+        </form>
+    @endsection
+</div>

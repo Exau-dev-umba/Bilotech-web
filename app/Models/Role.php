@@ -2,27 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
-
     use HasFactory;
+    use SoftDeletes;
     public $incrementing = false;
-    protected $fillable = [ 
-         'name' 
+    protected $fillable = [
+         'name',
     ];
+    protected $dates = ['deleted_at'];
 
-    public function users(){
+    public function users()
+    {
         return $this->belongsToMany('App\Models\User');
     }
-
-    public function hasRole($roleName)
-{
-    return $this->roles()->where('name', $roleName)->exists();
-}
-
 }
