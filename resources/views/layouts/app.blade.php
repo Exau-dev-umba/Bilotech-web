@@ -50,6 +50,9 @@
 
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
+                @if (!(Route::currentRouteName() == 'home' || Route::currentRouteName() == 'login'))
+                    @include('layouts.breadcrumb')
+                @endif
                 @yield('content')
             </div>
 
@@ -61,6 +64,7 @@
                 <strong>Copyright &copy; 2014-2023 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
                 reserved.
             </footer>
+            @yield('scripts')
         </div>
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>

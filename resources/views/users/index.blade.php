@@ -1,64 +1,69 @@
 @extends('layouts.app')
-@section('content')
-   <section class="content-header">
-     <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1>Liste des utlisateurs</h1>
-        </div>
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Liste des utlisateurs</li>
-          </ol>
-        </div>
-      </div>
-     </div><!-- /.container-fluid -->
-  </section>
-   <div class="card">
-        <div class="card-header text-center">
-            <h3 class="card-title"></h3>
-            <table id="example1" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Email</th>
-                        <th>Rôles</th>
-                        {{-- @can('manage-users') --}}
-                        <th>Action</th>
-                        {{-- @endcan --}}
-                    </tr>
-                </thead>
-                    <tbody>
-                      @foreach ($users as $user)
-                      @if (!$user->hasRole(['admin']))
-                          <tr>
-                              <td> {{$user->name }} </td>
-                              <td> {{$user->email }} </td>
-                              <td> {{ implode(',' , $user->roles()->get()->pluck('name')->toArray()) }} </td>
-                              {{-- @can('manage-users') --}}
-                              <td>
-                                  <a href=" {{route('users.edit', $user->id)}} "><button class=" btn btn-default"><i class="fas fa-pencil-alt"></i></button></a>
-                                  
-                                  <form action="{{route('users.destroy', $user->id)}}" method="post" class="d-inline">
-                                      @csrf
-                                      @method('DELETE')
-                                      <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                  </form>
-                                  
-                              </td>
-                              {{-- @endcan --}}
-                          </tr>
-                      @endif
-                  @endforeach
-                    </tbody>
-            </table>
-        </div>
-    </div>
+@section('title')
+    <span>Liste des Utilisateurs</span>
 @endsection
+@section('content')
+<div class="container">
+        <div class="card">
+            <div class="card-body  p-0">
+                <table id="example1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Nom</th>
+                            <th>Email</th>
+                            <th>Rôles</th>                          
+                            <th class="text-right">Actions</th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($users as $user)                
+                        <tr>
+                            <td class="text-left"> {{$user->name }} </td>
+                            <td> {{$user->email }} </td>
+                            <td> 
+                                @foreach($user->roles as $role)
+                                <a href="{{ route('roles.show', $role->id) }}">{{ $role->name }}</a> 
+                                @endforeach
+                            </td>
+                            
+                            <td class="text-right">
+                                <a href=" {{route('users.edit', $user->id)}} "><button class=" btn btn-default btn-sm"><i class="fas fa-pencil-alt"></i></button></a>
+                                @permission('delete', 'User')
+                                <form action="{{ route('users.destroy', $user->id) }}" method="post" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                        <a class="btn btn-danger btn-sm" href="{{ route('users.destroy', $user->id) }}" onclick="supprimer(event)" item="Voulez-vous supprimer l'utilisateur {{ $user->username }}" data-toggle="modal" data-target="#supprimer">
+                                            <i class="fas fa-trash">
+                                            </i>
+                                            
+                                        </a>
+                                </form>
+                                @endpermission
+                            </td>                           
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    @include('layouts.delete')
+</div>
+@endsection
+@section('scripts')
+    <script>
+        function supprimer(event){
+            event.preventDefault();
+            a = event.target.closest('a');
 
+            let deleteForm = document.getElementById('deleteForm');
+            deleteForm.setAttribute('action', a.getAttribute('href'));
 
+            let textDelete = document.getElementById('textDelete');
+            textDelete.innerHTML = a.getAttribute('item') + " ?";
 
-
-
-
+            let titleDelete = document.getElementById('titleDelete');
+            titleDelete.innerHTML = "Suppression";           
+            
+        }
+    </script>
+@endsection
