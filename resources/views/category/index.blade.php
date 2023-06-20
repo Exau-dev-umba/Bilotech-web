@@ -7,6 +7,27 @@
 @endsection
 @section('content')
     <section class="content">
+        @if (session('success'))
+        <div class="col-md-3">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Collapsable</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                {{ session('success') }}
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        @endif
         @if ($errors)
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible">
@@ -83,6 +104,18 @@
                                                                             <label>Parent ID <span class="text-red">*</span></label>
                                                                             <input type="number" class="form-control"  name="parent_id" value="{{ $category->parent_id }}" required>
                                                                         </div>
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputFile">File input</label>
+                                                                            <div class="input-group">
+                                                                              <div class="custom-file">
+                                                                                <input type="file" class="custom-file-input" id="exampleInputFile">
+                                                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                                                              </div>
+                                                                              <div class="input-group-append">
+                                                                                <span class="input-group-text" id="">Upload</span>
+                                                                              </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="card-footer">
@@ -138,6 +171,19 @@
                                             <label>Parent ID <span class="text-red">*</span></label>
                                             <input type="number" min="0" max="10" class="form-control"  name="parent_id" required>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputFile">File input</label>
+                                            <div class="input-group">
+                                              <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="exampleInputFile">
+                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                              </div>
+                                              <div class="input-group-append">
+                                                <span class="input-group-text" id="">Upload</span>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="card-footer">

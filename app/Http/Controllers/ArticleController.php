@@ -81,7 +81,16 @@ class ArticleController extends Controller
         return response()->json($articles);
     }
 
-    
+    public function similar($id){
+        $articles = Article::findOrFail($id);
+
+        $similarArticles = Article::where('category_id', $articles->category_id)
+        ->where('id', '!=', $id )
+        ->limit(5)
+        ->get();
+
+        return response()->json($similarArticles);
+    }
 
 
     /**
