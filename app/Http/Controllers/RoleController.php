@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class RoleController extends Controller
@@ -16,9 +18,11 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::latest()->paginate(4);
+
         return view('roles.index', compact('roles'))
             ->with('i', (request()->input('page', 1) - 1) * 4);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -28,6 +32,7 @@ class RoleController extends Controller
     {
         return view('roles.create');
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -35,13 +40,21 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
-        Role::create($request->all());
+        $role = Role::where('name', $request->name)->withTrashed()->first();
+
+        if ($role) {
+            $role->restore();
+        } else {
+            $request->validate([
+                'name' => 'required',
+            ]);
+            Role::create($request->all());
+        }
+
         return redirect()->route('roles.index')
                         ->with('success', 'Role créé avec succès.');
     }
+
     /**
      * Display the specified resource.
      *
@@ -52,7 +65,7 @@ class RoleController extends Controller
     public function show($id)
     {
         $role = Role::where('id', $id)->firstOrFail();
-   
+
         $users = $role->users()->get();
         $policies = DB::select('select * from role_police where role_id = ?', [$id]);
         $actions = ['create', 'read', 'update', 'delete'];
@@ -61,6 +74,7 @@ class RoleController extends Controller
         foreach ($modelFiles as $file) {
             $models[] = pathinfo($file)['filename'];
         }
+
         return view('roles.show', [
             'models' => $models,
             'actions' => $actions,
@@ -68,6 +82,7 @@ class RoleController extends Controller
             'users' => $users,
     ], )->with('i', (request()->input('page', 1) - 1) * 5);
     }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -82,12 +97,14 @@ class RoleController extends Controller
         foreach ($modelFiles as $file) {
             $models[] = pathinfo($file)['filename'];
         }
+
         return view('roles.edit', [
             'models' => $models,
             'actions' => $actions,
     ], compact('role'))
         ->with('i', (request()->input('page', 1) - 1) * 5);
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -99,15 +116,17 @@ class RoleController extends Controller
             'name' => 'required',
         ]);
         $role->update($request->all());
+
         return redirect()->route('roles.index')
                         ->with('success', 'Role mis à jour avec succès');
     }
+
     public function modify(Request $request, $roleId)
     {
-            $role = DB::table('roles')
-            ->join('role_user', 'roles.id', '=', 'role_user.role_id')
-            ->where('role_user.user_id', '=', Auth::user()->id)
-            ->value('roles.name');
+        $role = DB::table('roles')
+        ->join('role_user', 'roles.id', '=', 'role_user.role_id')
+        ->where('role_user.user_id', '=', Auth::user()->id)
+        ->value('roles.name');
         if ($role == 'admin') {
             DB::table('role_police')->where('role_id', '=', $roleId)->delete();
             $form = $request->form;
@@ -124,11 +143,13 @@ class RoleController extends Controller
             } else {
                 return redirect()->route('roles.show', $request->role_id)->with('error', 'Veuillez cocher au moins une case.');
             }
+
             return redirect()->route('roles.show', $request->role_id);
         } else {
             return redirect()->back()->with('error', 'Vous n\'êtes pas autorisé à effectuer cette opération.');
         }
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -137,16 +158,8 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
+
         return redirect()->route('roles.index')
                         ->with('success', 'Role supprimé avec succès');
     }
 }
-
-
-
-
-
-
-
-
-

@@ -2,21 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\Image;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'price', 'negociation',  'category_id' ,'devise', 'user_id'];
+    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'Buyergit ', 'price', 'negociation',  'category_id', 'devise', 'user_id'];
+    protected $dates = ['deleted_at'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function images(){
+    public function images()
+    {
         return $this->hasMany(Image::class);
     }
 
@@ -24,6 +25,4 @@ class Article extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    
-    
 }
