@@ -11,11 +11,18 @@
         <div class="col-md-3">
             <div class="card card-success">
               <div class="card-header">
-                <h3 class="card-title">
-                    {{ session('success') }}
-                </h3>
+                <h3 class="card-title">Collapsable</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                </div>
+                <!-- /.card-tools -->
               </div>
-             
+              <!-- /.card-header -->
+              <div class="card-body">
+                {{ session('success') }}
+              </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -36,47 +43,35 @@
                 <i class="nav-icon fa fa-plus "></i>
             </button>
         </div>
-        <section class="content">   
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                <table id="example1" class="table table-bordered table-hover">
+        <div class="card">
+            <div class="card-body p-0">
+                <table class="table table-striped projects">
                     <thead>
-                    <tr>
-                        <th style="width: 1%">
-                            N°
-                        </th>
-                        <th style="width: 30%">
-                            Catégories
-                        </th>
-                        <th style="width: 15%">
-                            Parent 
-                        </th>
-                        <th style="width: 30%">
-                            Images
-                        </th>
-                        <th style="width: 5%">
-                            Action
-                        </th>
-                    </tr>
+                        <tr>
+                            <th style="width: 10%">
+                                N°
+                            </th>
+                            <th style="width: 40%">
+                                Catégories
+                            </th>
+                            <th style="width: 30%">
+                                Parent 
+                            </th>
+                            <th style="width: 40%">
+                                Action
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categories as $category )
+                    @foreach ($categories as $category )
                             <tr>
                                 
                                 <td>{{ $category->id }}</td>
                                 <td>{{ $category->category_name }}</td>
                                 <td>{{ $category->parent ? $category->parent->category_name : null }}</td>
                                 <td>
-                                    <img width="30" height="30" src="{{ asset('storage/' . $category->category_image) }}" class="img-thumbnail" alt="{{ $category->category_image }}">
-                                </td>
-                                <td>
                                     <a class="btn btn-info btn-sm edit-btn" href="#" data-toggle="modal" data-target="#edit-{{ $category->id }}" form="edit-trtr">
                                         <i class="fas fa-pencil-alt"></i>
-                                    </a> 
-                                    <a class="btn btn-danger btn-sm edit-btn" href="#" data-toggle="modal" data-target="#edit-{{ $category->id }}" form="edit-trtr">
-                                        <i class="fas fa-trash-alt"></i>
                                     </a>
 
                                     {{-- Formulaire Edit --}}
@@ -112,10 +107,10 @@
                                                                         <div class="form-group">
                                                                             <label for="exampleInputFile">File input</label>
                                                                             <div class="input-group">
-                                                                                <div class="custom-file">
-                                                                                    <input type="file" class="custom-file-input" id="exampleInputFile" name="category_image">
-                                                                                    <label class="custom-file-label" for="exampleInputFile" id="fileLabel">Choisir un fichier</label>
-                                                                                </div>
+                                                                              <div class="custom-file">
+                                                                                <input type="file" class="custom-file-input" id="exampleInputFile">
+                                                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                                                              </div>
                                                                               <div class="input-group-append">
                                                                                 <span class="input-group-text" id="">Upload</span>
                                                                               </div>
@@ -138,20 +133,16 @@
                                          
                                 </td>
                             </tr>
-                        @endforeach
-                  
+                    @endforeach
                     </tbody>
-                  </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </table>
             </div>
-        </section>
-         
             
-         </div>
-        </section>
+
+                
+            
+        </div>
+    </section>
     <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -181,13 +172,16 @@
                                             <input type="number" min="0" max="10" class="form-control"  name="parent_id" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputFile">Entrer un fichier<span class="text-red"> *</span></label>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="exampleInputFile" name="category_image">
-                                                <label class="custom-file-label" for="exampleInputFile">Choisir l'image</label>
+                                            <label for="exampleInputFile">File input</label>
+                                            <div class="input-group">
+                                              <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="exampleInputFile">
+                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                              </div>
+                                              <div class="input-group-append">
+                                                <span class="input-group-text" id="">Upload</span>
+                                              </div>
                                             </div>
-                                              
-                                         
                                         </div>
                                         
                                     </div>
@@ -203,31 +197,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-            <script>
-                document.getElementById('exampleInputFile').addEventListener('change', function(e) {
-                var fileName = e.target.files[0].name;
-                document.querySelector('.custom-file-label').textContent = fileName;
-                });
-            </script>
-        
-            <script  src="{{Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js')}}"></script>
-            @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
-            @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
-            @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
-            <script src="{{Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-            <script src="{{Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
-            <script src="{{ Vite::asset('resources/js/scripts.js') }}"></script>
-            <script src="{{Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-            <script src="{{vite::asset('node_modules/admin-lte/dist/js/demo.js')}}"></script>
-            <script>
-                $(function () {
-                $("#example1").DataTable({
-                    "responsive": true, "lengthChange": true, "autoWidth": true, "searching": true,"ordering": true,"paging": true,
-                    "data":""
-                }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-                });
-            </script>
 @endsection
