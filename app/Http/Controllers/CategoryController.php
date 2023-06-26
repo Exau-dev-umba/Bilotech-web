@@ -61,12 +61,25 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+       
         
-        $category = Category::create([
+        
+        
+        $image = $request->file('category_image');
+        
+        if ($request->hasFile('category_image')) {
+            $nameImage = time() . '.' . $image->extension();
+            $path = $image->storeAs('categories', $nameImage, 'public');
+        }else{
+            $path=null;
+        }
+        
+        Category::create([  
             'category_name' => $request->input("category_name"),
             'parent_id' => $request->input("parent_id"),
+            'category_image'=>$path
+            
         ]); 
-
         return redirect()->route('category.index')->with('success', 'La catégorie a été créée avec succès.');
 
        
@@ -120,7 +133,14 @@ class CategoryController extends Controller
         $request->validate([
             "category_name" => "required",
             "parent_id" => "required",
+            "category_image" => "required",
         ]);
+
+        $category = Category::create([
+            'category_name' => $request->input("category_name"),
+            'parent_id' => $request->input("parent_id"),
+            'category_image' => $request->category_image,
+        ]); 
 
         $category->update($request->all());
         return redirect()->back('category.index')->with('success', 'La catégorie a été modifié avec succès.');
