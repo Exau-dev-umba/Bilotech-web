@@ -2,54 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image;
-use App\Models\Article;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\ArticleResource;
-use App\Http\Controllers\ImageController;
-use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use App\Http\Resources\ArticleCollection;
+use App\Http\Resources\ArticleResource;
+use App\Models\Article;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
-        
     /**
      * @OA\Get(
      *     path="/articles",
      *     summary="Récupérer la liste des articles",
+     *
      *     @OA\Parameter(
      *         name="perPage",
      *         in="query",
      *         description="Nombre d'articles par page",
      *         required=false,
+     *
      *         @OA\Schema(type="integer", default=10)
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Succès - Liste des articles récupérée",
+     *
      *         @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="current_page", type="integer"),
      *             @OA\Property(property="per_page", type="integer"),
      *             @OA\Property(property="total", type="integer")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=500,
      *         description="Erreur interne du serveur"
      *     )
      * )
      */
-
     public function index(Request $request)
     {
-        $perPage = $request ->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
+        $perPage = $request->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
         $articles = Article::paginate($perPage);
         $data = new ArticleCollection($articles);
-        
+
+        // return view('articles.index')->with('articles', $articles);
         return response()->json($data);
     }
 
@@ -57,16 +59,19 @@ class ArticleController extends Controller
      * @OA\Get(
      *     path="/articles/search",
      *     summary="Rechercher des articles",
+     *
      *     @OA\Parameter(
      *         name="query",
      *         in="query",
      *         description="Terme de recherche",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
-     *         description="Succès - Liste des articles correspondant à la recherche",   
+     *         description="Succès - Liste des articles correspondant à la recherche",
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -74,34 +79,34 @@ class ArticleController extends Controller
      *     )
      * )
      */
-
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $query = $request->input('query');
-        $articles = Article::where('content', 'LIKE', "%query%")->orWhere('title', 'LIKE', "%$query%")->get();
+        $articles = Article::where('content', 'LIKE', '%query%')->orWhere('title', 'LIKE', "%$query%")->get();
+
         return response()->json($articles);
     }
 
-    public function similar($id){
+    public function similar($id)
+    {
         $articles = Article::findOrFail($id);
 
         $similarArticles = Article::where('category_id', $articles->category_id)
-        ->where('id', '!=', $id )
-        ->limit(5)
-        ->get();
+            ->where('id', '!=', $id)
+            ->limit(5)
+            ->get();
 
         return response()->json($similarArticles);
     }
-
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
     }
 
-        /**
+    /**
      * Store a newly created resource in storage.
      */
 
@@ -109,17 +114,22 @@ class ArticleController extends Controller
      * @OA\Post(
      *     path="/articles",
      *     summary="Créer un nouvel article",
+     *
      *     @OA\RequestBody(
      *         required=true,
      *         description="Données de l'article",
      *     ),
+     *
      *     @OA\Response(
      *         response=201,
      *         description="Article créé avec succès",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="id", type="integer")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=500,
      *         description="Erreur interne du serveur"
@@ -128,56 +138,54 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-
         $bodyStr = $request->getContent();
         $body = json_decode($bodyStr, true);
-      
+
         $article = Article::create([
-            'title' => $body["title"],
-            'keyword' => $body["keyword"],
-            'content' => $body["content"],
-            'country' => $body["country"],
-            'city' => $body["city"],
-            'price' => $body["price"],
-            'devise' => $body["devise"],
-            'negociation' => $body["negociation"],
-            'category_id' => $body["category_id"],
-            'user_id' => Auth::user()->id
-        
-        ]); 
+            'title' => $body['title'],
+            'keyword' => $body['keyword'],
+            'content' => $body['content'],
+            'country' => $body['country'],
+            'city' => $body['city'],
+            'buyer' => $body['buyer'],
+            'price' => $body['price'],
+            'devise' => $body['devise'],
+            'negociation' => $body['negociation'],
+            'category_id' => $body['category_id'],
+            'user_id' => Auth::user()->id,
+        ]);
 
-
-        if($article->save()){
+        if ($article->save()) {
             $data = new ArticleResource($article);
-            return response()->json( [
-                "id" => "$article->id"
+
+            return response()->json([
+                'id' => "$article->id",
             ], 201);
-        }
-
-
-        else{
+        } else {
             return response()->json([
                 'success' => false,
                 'errors' => $article->errors(),
-
             ], 500);
         }
-    
-}
-     /**
+    }
+
+    /**
      * @OA\Get(
      *     path="/articles/{article}",
      *     summary="Récupérer un article par son identifiant",
+     *
      *     @OA\Parameter(
      *         name="article",
      *         in="path",
      *         description="Identifiant de l'article",
      *         required=true,
+     *
      *         @OA\Schema(type="integer")
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
-     *         description="Succès - Article récupéré",        
+     *         description="Succès - Article récupéré",
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -185,41 +193,79 @@ class ArticleController extends Controller
      *     )
      * )
      */
-     public function show(Article $article)
-     {
+    public function show(Article $article)
+    {
         $data = new ArticleResource($article);
+
         return response()->json($data);
-     }
-  
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Article $article)
     {
-        //
     }
 
-    
+    // ici on restore juste un article
+    public function restoreArticle($id)
+    {
+        $article = Article::withTrashed()->find($id);
+        $article->restore();
+
+        return redirect()->back()->with('success', 'Article restored successfully');
+    }
+
+    // affichage des articles supprimées
+    public function trashed()
+    {
+        $articles = Article::onlyTrashed()->get();
+
+        return view('articles.deleteAll', compact('articles'));
+    }
+
+    public function vendu()
+    {
+        // Récupère tous les articles vendus pour l'utilisateur connecté
+        $articles = Article::whereNotNull('Buyer')
+        ->where('user_id', auth()->id())
+        ->get();
+
+        return response()->json($articles);
+    }
+
+    public function my_purchases()
+    {
+        $articles = Article::whereNotNull('Buyer')
+        ->where('Buyer', auth()->id())
+        ->get();
+
+        return response()->json($articles);
+    }
+
     /**
      * @OA\Put(
      *     path="/articles/{article}",
      *     summary="Mettre à jour un article",
+     *
      *     @OA\Parameter(
      *         name="article",
      *         in="path",
      *         description="Identifiant de l'article",
      *         required=true,
+     *
      *         @OA\Schema(type="integer")
      *     ),
+     *
      *     @OA\RequestBody(
      *         required=true,
      *         description="Données de l'article",
-     *        
+     *
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
-     *         description="Article mis à jour avec succès",   
+     *         description="Article mis à jour avec succès",
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -233,44 +279,43 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-         
         $article = Article::find($article->id);
         $article->title = $request->input('title');
         $article->keyword = $request->input('keyword');
         $article->content = $request->input('content');
         $article->country = $request->input('country');
         $article->city = $request->input('city');
+        $article->buyer = $request->input('buyer');
         $article->price = $request->input('price');
         $article->devise = $request->input('devise');
-        $article->negociation = $request->input('negociation') ;
-        $article->category_id = $request->input('category_id') ;
+        $article->negociation = $request->input('negociation');
+        $article->category_id = $request->input('category_id');
         $article->user_id = Auth::user()->id;
-        
-        if($article->save()){
+
+        if ($article->save()) {
             return response()->json($article, 200);
-        }
-
-
-        else{
+        } else {
             return response()->json([
                 'success' => false,
                 'errors' => $article->errors(),
-
             ], 500);
         }
     }
 
-     /**
+    /**
      * @OA\Delete(
      *     path="/articles/{article}",
      *     summary="Supprimer un article",
+     *
      *     @OA\Parameter(
      *         name="article",
      *         in="path",
      *         description="Identifiant de l'article",
      *         required=true,
+     *
      *         @OA\Schema(type="integer")
      *     ),
+     *
      *     @OA\Response(
      *         response=204,
      *         description="Article supprimé avec succès"
@@ -284,8 +329,10 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $article->delete();
+
         return response()->json([
-            '', 204
+            '',
+            204,
         ]);
     }
 }
