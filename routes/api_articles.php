@@ -1,11 +1,9 @@
 <?php
 
-
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\ImageController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,16 +16,15 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
-
-
 Route::get('articles', [ArticleController::class, 'index']);
 Route::get('articles/{article}/similar', [ArticleController::class, 'similar']);
 Route::get('articles/{article}', [ArticleController::class, 'show']);
 Route::get('articles/search', [ArticleController::class, 'search']);
 Route::get('categories', [CategoryController::class, 'index']);
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('articles/sold', [ArticleController::class, 'vendu']);
+    Route::get('articles/my_purchases', [ArticleController::class, 'my_purchases']);
     Route::post('articles/{id}/images', [ImageController::class, 'store']);
     Route::post('category', [CategoryController::class, 'store']);
-    Route::apiResource('articles', ArticleController::class, ["as" => "api"])->except(['index', 'show']);
+    Route::apiResource('articles', ArticleController::class, ['as' => 'api'])->except(['index', 'show']);
 });
-
