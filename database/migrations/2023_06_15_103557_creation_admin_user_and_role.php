@@ -23,6 +23,7 @@ return new class() extends Migration {
             'email' => 'admin@example.com',
             'telephone' => '0827029543',
             'password' => Hash::make('password'),
+            'created_at' => now(),
         ]);
 
         // Ajout du rôle 'admin' à l'utilisateur admin
