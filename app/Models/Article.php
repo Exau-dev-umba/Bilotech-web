@@ -24,6 +24,9 @@ class Article extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    
+
+    public function conversations(){
+        return $this->hasMany(Conversation::class);
+    }
     
 }
