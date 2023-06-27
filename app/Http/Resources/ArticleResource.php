@@ -14,21 +14,17 @@ class ArticleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($this->Buyer === null) {
-            return [
-                'id' => $this->id,
-                'title' => $this->title,
-                'keyword' => $this->keyword,
-                'content' => $this->content,
-                'city' => $this->city,
-                'Buyer' => $this->Buyer,
-                'price' => $this->price,
-                'devise' => $this->devise,
-                'negociation' => $this->negociation,
-                'images' => ImageResource::collection($this->images),
-            ];
-        }
-
-        return [];
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'keyword' => $this->keyword,
+            'content' => $this->content,
+            'city' => $this->city,
+            'Buyer' => $this->Buyer,
+            'price' => $this->price,
+            'devise' => $this->devise,
+            'negociation' => $this->negociation,
+            'images' => ImageResource::collection($this->images),
+        ];
     }
 }

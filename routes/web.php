@@ -33,7 +33,7 @@ Route::resource('users', App\Http\Controllers\UserController::class)->middleware
 Route::resource('articles', ArticleController::class)->middleware('checkaccess:Article');
 Route::post('articles/{id}/restore', 'App\Http\Controllers\ArticleController@restoreArticle')->name('articles.restore');
 Route::get('/trashed', [ArticleController::class, 'trashed'])->name('articles.trashed');
-Route::get('/sold', [ArticleController::class, 'vendu'])->name('articles.vendu');
-Route::get('/my_purchases', [ArticleController::class, 'my_purchases'])->name('articles.my_purchases');
+Route::get('/sold', [ArticleController::class, 'sold'])->prefix('article/');
+Route::get('/my_purchases', [ArticleController::class, 'my_purchases'])->prefix('article/');
 
 Auth::routes();

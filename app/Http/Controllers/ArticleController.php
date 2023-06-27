@@ -48,7 +48,7 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->has('perPage') ? $request->query('perPage') : env('PER_PAGE');
-        $articles = Article::paginate($perPage);
+        $articles = Article::whereNull('buyer')->paginate($perPage);
         $data = new ArticleCollection($articles);
 
         // return view('articles.index')->with('articles', $articles);
@@ -224,14 +224,15 @@ class ArticleController extends Controller
         return view('articles.deleteAll', compact('articles'));
     }
 
-    public function vendu()
+    public function sold()
     {
         // Récupère tous les articles vendus pour l'utilisateur connecté
         $articles = Article::whereNotNull('Buyer')
         ->where('user_id', auth()->id())
         ->get();
+        $data = new ArticleCollection($articles);
 
-        return response()->json($articles);
+        return response()->json($data);
     }
 
     public function my_purchases()
@@ -239,8 +240,9 @@ class ArticleController extends Controller
         $articles = Article::whereNotNull('Buyer')
         ->where('Buyer', auth()->id())
         ->get();
+        $data = new ArticleCollection($articles);
 
-        return response()->json($articles);
+        return response()->json($data);
     }
 
     /**
