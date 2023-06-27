@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\Visites_articles;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
@@ -38,22 +40,39 @@ class AuthController extends Controller
             } else {
                 $image = null;
             }
-            $users->name = $request->name;
-            $users->email = $request->email;
-            $users->image = Storage::url($image);
-            $users->telephone = $request->telephone;
-            $users->password = Hash::make($request->password, [
-                "rounds" => 12
+            $validate = $request->validate([
+                'name' => "required",
+                'password' => "required",
+                'email' => "required",
+                'telephone' => "required"
             ]);
-            $users->save();
-            $token = $users->createToken($request->email)->plainTextToken;
-            $users = new UserResource($users);
+
+            $users = User::create([
+                "name" => $request->name,
+                "email" => $request->email,
+                "image" => Storage::url($image),
+                "telephone" => $request->telephone,
+                "password" => Hash::make($request->password, ["rounds" => 12])
+            ]);
+
+            $user = new UserResource($users);
+
+            $ip = $request->ip();
+            Visites_articles::where('ip_address', $ip)
+                ->update(['user_id' => $users->id]);
+
             return response()->json([
-                "user" => $users,
-                'token'=> $token
-            ],201);
-        } catch (Exception $e) {
-            return response()->json($e);
+                'status' => true,
+                'user' => $user,
+                'token' => $user->createToken('secret')->plainTextToken
+            ], 201);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 401);
         }
     }
 

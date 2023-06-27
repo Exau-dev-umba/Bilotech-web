@@ -3,13 +3,17 @@
 namespace App\Models;
 
 use App\Models\Image;
+use App\Models\Visites_articles;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'price', 'negociation',  'category_id' ,'devise', 'user_id'];
+    use SoftDeletes;
+    protected $fillable = ['title', 'keyword', 'content', 'country', 'city', 'price', 'negociation', 'category_id', 'devise', 'user_id'];
+    protected $dates = ['deleted_at',];
 
     public function user()
     {
@@ -23,6 +27,14 @@ class Article extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function views()
+    {
+        return $this->hasMany(Visites_articles::class);
+    }
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
     
     

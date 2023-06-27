@@ -6,8 +6,11 @@ use App\Models\Image;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Visites_articles;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use App\Http\Resources\ArticleResource;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\ImageController;
 use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
@@ -50,6 +53,7 @@ class ArticleController extends Controller
         $articles = Article::paginate($perPage);
         $data = new ArticleCollection($articles);
         
+        // return view('articles.index')->with('articles', $articles);
         return response()->json($data);
     }
 
@@ -185,12 +189,31 @@ class ArticleController extends Controller
      *     )
      * )
      */
-     public function show(Article $article)
-     {
+    public function show(Article $article)
+    {
+        //on recupere les infos dans la table Vistes_articles avec l'id de l'aticle touché et l'adresse ip de l'appareil
+        $vue_existante = Visites_articles::where('article_id', $article->id)
+            ->whereIpAddress(request()->ip())
+            ->first();
+        //s'il n'y en a pas on enregistre l'id de l'article touché et l'adresse ip de l'appareil
+        if (!$vue_existante) {
+
+            Visites_articles::create([
+                'ip_address' => request()->ip(),
+                'article_id' => $article->id
+            ]);
+            // On compte le nombre d'enregistrement et on le donne au champ vues_count de l'article
+          $nmbreDeVue =  Visites_articles::where('article_id', $article->id)
+                ->whereNotNull('user_id')
+                ->orWhereNotNull('ip_address')
+                ->count();
+            $article->vues_count = $nmbreDeVue;
+            $article->save();
+        }
         $data = new ArticleResource($article);
         return response()->json($data);
-     }
-  
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -200,7 +223,22 @@ class ArticleController extends Controller
         //
     }
 
-    
+    // ici on restore juste un article
+    public function restoreArticle($id)
+    {
+        $article = Article::withTrashed()->find($id);
+        $article->restore();
+        return redirect()->back()->with('success', 'Article restored successfully');
+    }
+    // affichage des articles supprimées
+    public function trashed()
+    {
+        $articles = Article::onlyTrashed()->get();
+
+        return view('articles.deleteAll', compact('articles'));
+    }
+
+
     /**
      * @OA\Put(
      *     path="/articles/{article}",
@@ -233,7 +271,7 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-         
+
         $article = Article::find($article->id);
         $article->title = $request->input('title');
         $article->keyword = $request->input('keyword');
@@ -242,16 +280,13 @@ class ArticleController extends Controller
         $article->city = $request->input('city');
         $article->price = $request->input('price');
         $article->devise = $request->input('devise');
-        $article->negociation = $request->input('negociation') ;
-        $article->category_id = $request->input('category_id') ;
+        $article->negociation = $request->input('negociation');
+        $article->category_id = $request->input('category_id');
         $article->user_id = Auth::user()->id;
-        
-        if($article->save()){
+
+        if ($article->save()) {
             return response()->json($article, 200);
-        }
-
-
-        else{
+        } else {
             return response()->json([
                 'success' => false,
                 'errors' => $article->errors(),
@@ -260,7 +295,7 @@ class ArticleController extends Controller
         }
     }
 
-     /**
+    /**
      * @OA\Delete(
      *     path="/articles/{article}",
      *     summary="Supprimer un article",
@@ -285,7 +320,8 @@ class ArticleController extends Controller
     {
         $article->delete();
         return response()->json([
-            '', 204
+            '',
+            204
         ]);
     }
 }

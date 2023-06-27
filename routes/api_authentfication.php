@@ -2,6 +2,7 @@
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\Visites_articles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -23,18 +24,32 @@ use App\Http\Controllers\Api\AuthController;
 Route::post('/login', function (Request $request) {
 
     $user = User::where('email', $request->email)->first();
+    $validate = $request->validate([
+        'email' => "required",
+        'password' => "required"
+    ]);
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
-
-        return response()->json(['message' => 'Email ou mot de passe incorrect']);
+    if (!Auth::attempt($validate)) {
+        return response()->json([
+            'message' => "Mot de passe ou email incorrect"
+        ], 422);
     }
-    $token = $user->createToken($request->email)->plainTextToken;
-    $user = new UserResource($user);
+    //$token = $user->createToken($request->email)->plainTextToken;
+    $user = new UserResource(auth()->user());
+    
+    $ip = $request->ip();
+    Visites_articles::where('ip_address', $ip)
+        ->update(['user_id' => $user->id]);
 
-    return response()->json(['user' => $user, 'token' => $token]);
+    return response()->json([
+        'status' => true,
+        'user' => $user ,
+        'token' => auth()->user()->createToken('secret')->plainTextToken
+    ], 200);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/user/{id}/image', [AuthController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/allUser',[AuthController::class,'allUser']);
