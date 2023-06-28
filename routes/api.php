@@ -21,6 +21,10 @@ require ('api_authentfication.php');
 require('api_articles.php');
 require('api_preference.php');
 
+
+require('api_tags.php');
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
    // return $request->user();
     //Route::get('/messages/{recipient_id}', 'App\Http\Controllers\MessageController@index');
@@ -35,5 +39,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/messages/{id}',[MessageController::class,'listemessage']);
 });
+
+require('api_message.php');
+
+
+
 
 
