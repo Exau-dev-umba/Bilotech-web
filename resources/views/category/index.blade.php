@@ -109,7 +109,7 @@
                                                                             <input type="text" class="form-control" placeholder="Nom de la catégorie" name="category_name" value="{{ $category->category_name }}" required>
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <label>Parent ID <span class="text-red">*</span></label>
+                                                                            <label>Parent ID</label>
                                                                             <select class="form-control" name="parent_id">
                                                                                 <option value="">Sélectionnez une catégorie parente</option>
                                                                                 @foreach ($categories as $cat)
@@ -213,7 +213,7 @@
                                             <input type="text" class="form-control" placeholder="Nom de la catégorie" name="category_name" required>
                                         </div>
                                         <div class="form-group">
-                                            <label>Parent ID <span class="text-red">*</span></label>
+                                            <label>Parent ID</label>
                                             <select class="form-control" name="parent_id">
                                                 <option value="">Sélectionnez une catégorie parente</option>
                                                 @foreach ($categories as $category)
