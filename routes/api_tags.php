@@ -18,9 +18,3 @@ use App\Http\Controllers\Api\PreferenceController;
 
 Route::get('/tag', [TagController::class, 'index']);
 Route::post('/tag', [TagController::class, 'store']);
-
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('users/preferences', [PreferenceController::class, 'recuperePreferences']);
-    Route::put('users/preferences', [PreferenceController::class, 'modifiePreferences']);
-
-});

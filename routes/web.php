@@ -2,13 +2,15 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
+resources/views/users| Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
@@ -25,12 +27,15 @@ Auth::routes();
 
 
 Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('checkaccess:Role');
-Route::post("roles/modify/{roleId}", [App\Http\Controllers\RoleController::class,'modify'])->name('roles.modify');
+Route::post("roles/modify/{roleId}", [App\Http\Controllers\RoleController::class, 'modify'])->name('roles.modify');
 
-Route::delete("roles/alter/{roleId}", [App\Http\Controllers\RoleController::class,'alter'])->name('roles.alter');
+Route::delete("roles/alter/{roleId}", [RoleController::class, 'alter'])->name('roles.alter');
 
 
 Route::resource('users', App\Http\Controllers\UserController::class)->middleware('checkaccess:User');
+Route::resource('articles', ArticleController::class)->middleware('checkaccess:Article');
+Route::post('articles/{id}/restore', 'App\Http\Controllers\ArticleController@restoreArticle')->name('articles.restore');
+Route::get('/trashed', [ArticleController::class, 'trashed'])->name('articles.trashed');
 
 Auth::routes();
 
