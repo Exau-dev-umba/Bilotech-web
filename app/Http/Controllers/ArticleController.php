@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\Image;
+use App\Models\Category;
+use App\Models\Visites_articles;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\ImageController;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleCollection;
@@ -195,10 +202,31 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        $data = new ArticleResource($article);
+        //on recupere les infos dans la table Vistes_articles avec l'id de l'aticle touché et l'adresse ip de l'appareil
+        $vue_existante = Visites_articles::where('article_id', $article->id)
+            ->whereIpAddress(request()->ip())
+            ->first();
+        //s'il n'y en a pas on enregistre l'id de l'article touché et l'adresse ip de l'appareil
+        if (!$vue_existante) {
 
+            Visites_articles::create([
+                'ip_address' => request()->ip(),
+                'article_id' => $article->id
+            ]);
+            // On compte le nombre d'enregistrement et on le donne au champ vues_count de l'article
+          $nmbreDeVue =  Visites_articles::where('article_id', $article->id)
+                ->whereNotNull('user_id')
+                ->orWhereNotNull('ip_address')
+                ->count();
+            $article->vues_count = $nmbreDeVue;
+            $article->save();
+        }
+        $data = new ArticleResource($article);
         return response()->json($data);
     }
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -224,6 +252,7 @@ class ArticleController extends Controller
         return view('articles.deleteAll', compact('articles'));
     }
 
+
     public function sold()
     {
         // Récupère tous les articles vendus pour l'utilisateur connecté
@@ -244,6 +273,7 @@ class ArticleController extends Controller
 
         return response()->json($data);
     }
+
 
     /**
      * @OA\Put(
@@ -281,6 +311,7 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
+
         $article = Article::find($article->id);
         $article->title = $request->input('title');
         $article->keyword = $request->input('keyword');

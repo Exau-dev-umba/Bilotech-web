@@ -25,7 +25,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('checkaccess:Role');
+
 Route::post('roles/modify/{roleId}', [App\Http\Controllers\RoleController::class, 'modify'])->name('roles.modify');
+
 
 Route::delete('roles/alter/{roleId}', [RoleController::class, 'alter'])->name('roles.alter');
 

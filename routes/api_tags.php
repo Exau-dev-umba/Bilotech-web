@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\PreferenceController;
 
 
@@ -15,14 +16,5 @@ use App\Http\Controllers\Api\PreferenceController;
 |
 */
 
-
-
-
-
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('users/preferences', [PreferenceController::class, 'ajoutPreferences']);
-
-    Route::get('users/preferences', [PreferenceController::class, 'recuperePreferences']);
-    Route::put('users/preferences', [PreferenceController::class, 'modifiePreferences']);
-
-});
+Route::get('/tag', [TagController::class, 'index']);
+Route::post('/tag', [TagController::class, 'store']);

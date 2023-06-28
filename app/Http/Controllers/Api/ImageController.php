@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Image;
 use App\Models\Article;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Spatie\FlareClient\Http\Response;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\StoreImageRequest;
@@ -36,8 +38,9 @@ class ImageController extends Controller
         if ($request->hasFile('image_path')) {
 
                 foreach ($request->file('image_path') as $image) {
-                    $nameImage =  microtime(true) .'.' . $image->extension();
-                    $fichier = $image->storeAs('articles', $nameImage, 'public');
+                    $result = hash('md5', microtime(true));
+                    $nameImage = $result .'.' . $image->extension();
+                    $fichier = $image->storeAs('articles/'.Auth::user()->id, $nameImage, 'public');
                     $newImage = new Image();
                     $newImage->image_path = $fichier;
                     // Utiliser la méthode store du contrôleur ImageController
