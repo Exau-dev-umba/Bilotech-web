@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -34,7 +35,9 @@ class CategoryController extends Controller
     
     public function create()
     {
-        //
+        $categories = Category::all();
+
+        return view('category.create', compact('categories'));
     }
 
     /**
@@ -61,16 +64,26 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'category_name' => 'required',
+            'category_image' => 'required',
+        ]);
         
-        $category = Category::create([
-            'category_name' => $request->input("category_name"),
-            'parent_id' => $request->input("parent_id"),
-        ]); 
+        $category = new Category();
+        $category->category_name = $request->input("category_name");
+        $category->parent_id = $request->input("parent_id");
+
+        if ($request->hasFile('category_image')) {
+            $nameImage = date('YmdHis') . '.' . $request->category_image->extension();
+            $image = $request->category_image->storeAs('images/categories', $nameImage, 'public');
+            $category->category_image = $image; 
+        }
+
+        $category->save();
 
         return redirect()->route('category.index')->with('success', 'La catégorie a été créée avec succès.');
-
-       
-    }
+    }   
 
     /**
      * Display the specified resource.
@@ -115,26 +128,34 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function update(Category $category, Request $request)
+    public function update(Request $request, Category $category )
     {
-        $request->validate([
-            "category_name" => "required",
-            "parent_id" => "required",
-        ]);
+    
 
-        $category->update($request->all());
-        return redirect()->back('category.index')->with('success', 'La catégorie a été modifié avec succès.');
+        if ($request->hasFile('category_image')) {
+            $nameImage = date('YmdHis') . '.' . $request->category_image->extension();
+            $image = $request->category_image->storeAs('images/categories', $nameImage, 'public');
+            Storage::delete($category->category_image);
+        }
+
+        else{
+            $image = $category->category_image;
+        }
+
+        $category->update([
+            "category_name"=> request("category_name"),
+            "parent_id"=> request("parent_id"),
+            "category_image"=> $image,
+        ]);
+        return redirect()->back()->with('success', 'La catégorie a été modifié avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(Category $category)
     {
-        //
+        // Supprime la catégorie
+        $category->delete();
+
+        return redirect()->back()->with('success', 'La catégorie a été supprimée avec succès.');
     }
 }

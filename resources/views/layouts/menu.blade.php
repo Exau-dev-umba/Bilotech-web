@@ -12,18 +12,7 @@
         <p>Categories</p>
     </a>
 </li>
-<li class="nav-item">
-    <a href="{{ route('article.index') }}" class="nav-link {{ Request::is('article') ? 'active' : '' }}">
-        <i class="nav-icon fa fa-list"></i>
-        <p>Articles</p>
-    </a>
-</li>
-<li class="nav-item">
-    <a href="{{ route('tag.index') }}" class="nav-link {{ Request::is('tag') ? 'active' : '' }}">
-        <i class="nav-icon fa fa-list"></i>
-        <p>Tags</p>
-    </a>
-</li>
+
 
 <li class="nav-item">
     <a href="{{ route('roles.index') }}" class="nav-link {{ Request::is('roles.index') ? 'active' : '' }}">
