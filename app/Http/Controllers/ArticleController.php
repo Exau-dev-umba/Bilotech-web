@@ -106,16 +106,17 @@ class ArticleController extends Controller
         return response()->json($similarArticles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    
+    public function getArticlesByCategory(Category $category)
     {
+        $articleC = Article::find($category->id);
+
+        return ArticleResource::collection($articleC);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
+
+    
 
     /**
      * @OA\Post(
@@ -226,14 +227,6 @@ class ArticleController extends Controller
     }
 
 
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Article $article)
-    {
-    }
 
     // ici on restore juste un article
     public function restoreArticle($id)
