@@ -4,14 +4,27 @@
         <i class="nav-icon fas fa-home"></i>
         <p>Home</p>
     </a>
-   
+
 </li>
 <li class="nav-item">
-    <a href="{{ route('category.index') }}" class="nav-link {{ Request::is('category') ? 'active' : '' }}">
+    <a href="{{ route('category.index') }}" class="nav-link {{ Request::is('category.index') ? 'active' : '' }}">
         <i class="nav-icon fa fa-th"></i>
         <p>Categories</p>
     </a>
 </li>
+
+{{-- <li class="nav-item">
+    <a href="{{ route('article.index') }}" class="nav-link {{ Request::is('article') ? 'active' : '' }}">
+        <i class="nav-icon fa fa-list"></i>
+        <p>Articles</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('tag.index') }}" class="nav-link {{ Request::is('tag') ? 'active' : '' }}">
+        <i class="nav-icon fa fa-list"></i>
+        <p>Tags</p>
+    </a>
+</li> --}}
 
 
 <li class="nav-item">
@@ -21,12 +34,16 @@
     </a>
 </li>
 @permission('read', 'User')
-<li class="nav-item">
-    <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('users.index') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-users"></i>
-        <p>Liste des utlisateurs</p>
-    </a>
-</li>  
+    <li class="nav-item">
+        <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('users.index') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-users"></i>
+            <p>Liste des utlisateurs</p>
+        </a>
+    </li>
 @endpermission
-
-
+<li class="nav-item">
+    <a href="{{ route('articles.index') }}" class="nav-link {{ Request::is('articles.index') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-users"></i>
+        <p>Liste des Articles</p>
+    </a>
+</li>

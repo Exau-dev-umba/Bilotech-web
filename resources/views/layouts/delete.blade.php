@@ -18,10 +18,10 @@
                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Non</button>
                     </div>
                 </form>
-                
+
             </div>
-            
+
         </div>
-    
-    </div>    
+
+    </div>
 </div>

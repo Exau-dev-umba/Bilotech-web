@@ -4,8 +4,6 @@
         <div class="wrapper">
             <!-- Main Header -->
 
-            
-
             @include('layouts.header')
 
 
