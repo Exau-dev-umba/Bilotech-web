@@ -28,14 +28,13 @@ Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware
 
 Route::post('roles/modify/{roleId}', [App\Http\Controllers\RoleController::class, 'modify'])->name('roles.modify');
 
-
 Route::delete('roles/alter/{roleId}', [RoleController::class, 'alter'])->name('roles.alter');
 
 Route::resource('users', App\Http\Controllers\UserController::class)->middleware('checkaccess:User');
 Route::resource('articles', ArticleController::class)->middleware('checkaccess:Article');
 Route::post('articles/{id}/restore', 'App\Http\Controllers\ArticleController@restoreArticle')->name('articles.restore');
 Route::get('/trashed', [ArticleController::class, 'trashed'])->name('articles.trashed');
-Route::get('/sold', [ArticleController::class, 'sold'])->prefix('article/');
-Route::get('/my_purchases', [ArticleController::class, 'my_purchases'])->prefix('article/');
+Route::get('/sold/articles', [ArticleController::class, 'sold'])->name('sold.articles');
+Route::get('/my_purchases/articles', [ArticleController::class, 'my_purchases'])->name('my_puchases.articles');
 
 Auth::routes();
