@@ -8,7 +8,7 @@
 @section('content')
     <section class="content">
         @if (session('success'))
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="card card-success">
               <div class="card-header">
                 <h3 class="card-title">{{ session('success') }}</h3>
@@ -90,7 +90,7 @@
                                                         </div>
                                                         <!-- /.card-header -->
                                                         <div class="card-body">
-                                                            <form method="POST" action="{{ route('category.update', $tag) }}" enctype="multipart/form-data">
+                                                            <form method="POST" action="{{ route('tag.update', $tag) }}" enctype="multipart/form-data">
                                                                 @csrf
                                                                 @method("PUT")
                                                                 <div class="row">
@@ -131,7 +131,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                    <form id="edit-{{ $tag->id }}" action="{{ route('category.destroy', $tag) }}" method="POST">
+                                                    <form id="edit-{{ $tag->id }}" action="{{ route('tag.destroy', $tag) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger">Supprimer</button>

@@ -10,7 +10,11 @@ Route::get('/tags', [TagController::class, 'index'])->name('tag.index');
     
 Route::middleware('auth:sanctum')->group(function () {
 
+    Route::get('/tags', [TagController::class, 'index'])->name('tag.index');
+    Route::get('/tags/create', [TagController::class, 'create'])->name('tag.create'); 
     Route::post('/tags', [TagController::class, 'store'])->name('tag.store');
+    Route::put('/tags/{tag}', [TagController::class, 'update'])->name('tag.update');
+    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tag.destroy');
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('category.create');

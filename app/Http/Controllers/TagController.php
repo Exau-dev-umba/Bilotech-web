@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,6 @@ class TagController extends Controller
     {
         $request->validate([
             'nom' => 'required',
-          
         ]);
         
         $tag= new Tag();
@@ -63,16 +63,23 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Tag $tag)
     {
-        //
+        $tag->update([
+            "nom"=> request("nom"), 
+        ]);
+
+        return redirect()->back()->with('success', 'La Tag a été modifié avec succès.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Tag $tag)
     {
-        //
+         
+         $tag->delete();
+
+         return redirect()->back()->with('success', 'La Tag été supprimée avec succès.');
     }
 }
