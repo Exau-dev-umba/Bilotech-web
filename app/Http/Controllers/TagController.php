@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
-class ArticleController extends Controller
+class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('articles');
+        $tags = Tag::all();
+        return view('tag.index', compact('tags'));
     }
 
     /**
@@ -19,7 +21,9 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        $tags = Tag::all();
+
+        return view('tag.create', compact('tags'));
     }
 
     /**
@@ -27,7 +31,17 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required',
+          
+        ]);
+        
+        $tag= new Tag();
+        $tag->nom = $request->input("nom");
+     
+        $tag->save();
+
+        return redirect()->route('tag.index')->with('success', 'La tag a été créée avec succès.');
     }
 
     /**
