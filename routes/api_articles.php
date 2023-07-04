@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\ImageController;
-use App\Http\Controllers\Api\LikeController;
-use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\LikeController;
+use App\Http\Controllers\Api\ImageController;
+
+use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +17,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('/categories/{category}/articles', 'CategoryController@getArticlesByCategory');
+
 Route::get('articles/search', [ArticleController::class, 'search']);
-Route::get('/categories/{category}/articles', [CategoryController::class, 'getArticlesByCategory']);
 Route::get('category', [CategoryController::class, 'index']);
 Route::get('categories', 'App\Http\Controllers\Api\CategoryController@index');
 Route::get('articles', [ArticleController::class, 'index']);
 Route::get('articles/{article}/similar', [ArticleController::class, 'similar']);
 Route::get('articles/{article}', [ArticleController::class, 'show']);
-
+Route::get('/articles/category/{category}', 'App\Http\Controllers\Api\ArticleController@getArticlesByCategory');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/articles/{id}/likes', [LikeController::class, 'likeOrUnlike']);
