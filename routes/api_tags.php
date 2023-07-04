@@ -16,5 +16,5 @@ use App\Http\Controllers\Api\PreferenceController;
 |
 */
 
-Route::get('/tag', [TagController::class, 'index']);
-Route::post('/tag', [TagController::class, 'store']);
+Route::get('/tags', [TagController::class, 'index']);
+

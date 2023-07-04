@@ -19,14 +19,16 @@
         <p>Articles</p>
     </a>
 </li>
+
+}}
+ --}}
+
 <li class="nav-item">
     <a href="{{ route('tag.index') }}" class="nav-link {{ Request::is('tag') ? 'active' : '' }}">
-        <i class="nav-icon fa fa-list"></i>
+        <i class="nav-icon fa fa-hashtag"></i>
         <p>Tags</p>
     </a>
-</li> --}}
-
-
+</li>
 <li class="nav-item">
     <a href="{{ route('roles.index') }}" class="nav-link {{ Request::is('roles.index') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user"></i>
