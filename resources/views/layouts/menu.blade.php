@@ -24,11 +24,19 @@
  --}}
 
 <li class="nav-item">
+    <a href="{{ route('articles.index') }}" class="nav-link {{ Request::is('article.index') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-newspaper"></i>
+        <p>Articles</p>
+    </a>
+</li>
+
+<li class="nav-item">
     <a href="{{ route('tag.index') }}" class="nav-link {{ Request::is('tag') ? 'active' : '' }}">
         <i class="nav-icon fa fa-hashtag"></i>
         <p>Tags</p>
     </a>
 </li>
+
 <li class="nav-item">
     <a href="{{ route('roles.index') }}" class="nav-link {{ Request::is('roles.index') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user"></i>
@@ -43,9 +51,4 @@
         </a>
     </li>
 @endpermission
-<li class="nav-item">
-    <a href="{{ route('articles.index') }}" class="nav-link {{ Request::is('articles.index') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-users"></i>
-        <p>Liste des Articles</p>
-    </a>
-</li>
+

@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+use App\Http\Controllers\ArticleController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
@@ -21,6 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/categories', [CategoryController::class, 'store'])->name('category.store');
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    
+    Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
+    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('article.destroy');
 });
     
 
