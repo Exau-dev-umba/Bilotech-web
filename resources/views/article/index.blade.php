@@ -3,27 +3,18 @@
 
 @section('content')
 @section('title')
-    <a href="#">Categories</a>
+    <a href="#">Articles</a>
 @endsection
 @section('content')
     <section class="content">
         @if (session('success'))
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="card card-success">
               <div class="card-header">
-                <h3 class="card-title">Collapsable</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                </div>
+                <h3 class="card-title">{{ session('success') }}</h3>
                 <!-- /.card-tools -->
               </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                {{ session('success') }}
-              </div>
-              <!-- /.card-body -->
+             
             </div>
             <!-- /.card -->
           </div>
@@ -38,163 +29,119 @@
                 </div>
             @endforeach
         @endif
-        <div class="text-right mb-2">
-            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#modal-default">
-                <i class="nav-icon fa fa-plus "></i>
-            </button>
-        </div>
-        <div class="card">
-            <div class="card-body p-0">
-                <table class="table table-striped projects">
+        
+        <section class="content">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">La listes des tous les articles</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <table id="example1" class="table table-bordered table-hover">
                     <thead>
-                        <tr>
-                            <th style="width: 10%">
-                                N°
-                            </th>
-                            <th style="width: 40%">
-                                Catégories
-                            </th>
-                            <th style="width: 30%">
-                                Parent 
-                            </th>
-                            <th style="width: 40%">
-                                Action
-                            </th>
-                        </tr>
+                      <tr>
+                        <th style="width: 1%">
+                            N°
+                        </th>
+                        <th style="width: 30%">
+                            Articles
+                        </th>
+                        <th style="width: 30%">
+                            Users
+                        </th>
+                      
+                        <th style="width: 10%">
+                            Action
+                        </th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categories as $category )
-                            <tr>
+                      @foreach ($articles as $article )
+                            <tr >
                                 
-                                <td>{{ $category->id }}</td>
-                                <td>{{ $category->category_name }}</td>
-                                <td>{{ $category->parent ? $category->parent->category_name : null }}</td>
+                                <td>{{ ($articles->currentPage() - 1) * $articles->perPage() + $loop->iteration }} </td>
+                                <td>{{ $article->title}}</td>
+                                <td>{{ $article->user->name }}</td>
+                                
                                 <td>
-                                    <a class="btn btn-info btn-sm edit-btn" href="#" data-toggle="modal" data-target="#edit-{{ $category->id }}" form="edit-trtr">
-                                        <i class="fas fa-pencil-alt"></i>
+                                    
+                                    <a class="btn btn-danger btn-sm edit-btn" data-toggle="modal" href="#" data-target="#suppr-{{ $article->id }}" form="edit-{{ $article->id }}">
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
-
-                                    {{-- Formulaire Edit --}}
-                                    <div class="modal fade edit-form" id="edit-{{ $category->id }}">
-                                        <div class="modal-dialog">
+                                     
+                                     {{-- Modal de confirmation de supression --}}
+                                    <div class="modal fade" id="suppr-{{ $article->id }}" tabindex="-1" role="dialog" aria-labelledby="supprLabel-{{ $article->id }}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
+                                                    <h5 class="modal-title" id="supprLabel-{{ $article->id }}">Confirmation de suppression</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="card card-light">
-                                                        <div class="card-header">
-                                                            <h3 class="card-title">Modification de la catégorie</h3>
-                                                        </div>
-                                                        <!-- /.card-header -->
-                                                        <div class="card-body">
-                                                            <form method="POST" action="{{ route('category.update', $category) }}" enctype="multipart/form-data">
-                                                                @csrf
-                                                                @method("PUT")
-                                                                <div class="row">
-                                                                    <div class="col">
-                                                                        <!-- text input -->
-                                                                        <div class="form-group">
-                                                                            <label>Nom <span class="text-red">*</span></label>
-                                                                            <input type="text" class="form-control" placeholder="Nom de la catégorie" name="category_name" value="{{ $category->category_name }}" required>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label>Parent ID <span class="text-red">*</span></label>
-                                                                            <input type="number" class="form-control"  name="parent_id" value="{{ $category->parent_id }}" required>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="exampleInputFile">File input</label>
-                                                                            <div class="input-group">
-                                                                              <div class="custom-file">
-                                                                                <input type="file" class="custom-file-input" id="exampleInputFile">
-                                                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                                                              </div>
-                                                                              <div class="input-group-append">
-                                                                                <span class="input-group-text" id="">Upload</span>
-                                                                              </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer">
-                                                                    <button type="submit" class="btn btn-secondary float-right ">Modifier</button>
-                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
+                                                    <p>Êtes-vous sûr de vouloir supprimer cet article ?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                    <form id="edit-{{ $article->id }}" action="{{ route('articles.destroy', $article) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- Formulaire End Formualire Edit --}}
                                          
                                 </td>
                             </tr>
-                        @endforeach
+                      @endforeach
                     </tbody>
-                </table>
-            </div>
-            
+        
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
 
-                
-            
-        </div>
-    </section>
-    <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="card card-light">
-                        <div class="card-header">
-                            <h3 class="card-title">Créer une Catégorie</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <form method="POST" action="{{ route('category.store') }}" enctype="multipart/form-data">
-                                @csrf
-                                <div class="row">
-                                    <div class="col">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Nom <span class="text-red">*</span></label>
-                                            <input type="text" class="form-control" placeholder="Nom de la catégorie" name="category_name" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Parent ID <span class="text-red">*</span></label>
-                                            <input type="number" min="0" max="10" class="form-control"  name="parent_id" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputFile">File input</label>
-                                            <div class="input-group">
-                                              <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="exampleInputFile">
-                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                              </div>
-                                              <div class="input-group-append">
-                                                <span class="input-group-text" id="">Upload</span>
-                                              </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-secondary float-right ">Ajouter</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+              <!-- /.card -->
             </div>
-        </div>
-    </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </section>
+    
+    </section>
+
+@endsection
+@section('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    function updateFilename(input) {
+        if (input.files && input.files[0]) {
+        var filename = input.files[0].name;
+        $(input).next('.custom-file-label').html(filename);
+        }
+    }
+    </script>
+    <script  src="{{Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js')}}"></script>
+    @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
+    <script src="{{Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{ Vite::asset('resources/js/scripts.js') }}"></script>
+    <script src="{{Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{vite::asset('node_modules/admin-lte/dist/js/demo.js')}}"></script>
+    <script>
+        $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": true, "autoWidth": true, "searching": true,"ordering": true,"paging": true,
+            "data":""
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+</script>
 @endsection
