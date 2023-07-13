@@ -24,6 +24,7 @@ class ConversationVendeurResource extends JsonResource
         return [
             "id" => $this->id,
             "title" => $this->title,
+            "buyer" => $this->Buyer,
            // "keyword" => $this->keyword,
            // "content" => $this->content,
            // "city" => $this->city,

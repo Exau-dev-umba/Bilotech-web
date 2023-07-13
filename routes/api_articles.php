@@ -29,6 +29,7 @@ Route::get('/articles/category/{category}', 'App\Http\Controllers\Api\ArticleCon
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/articles/{id}/likes', [LikeController::class, 'likeOrUnlike']);
     Route::get('/sold/aticles', [ArticleController::class, 'sold']);
+    Route::post('/vente/aticles/{article}/{acheteur}', [ArticleController::class, 'actionVente']);
     Route::get('/my_purchases/articles', [ArticleController::class, 'my_purchases']);
     Route::post('articles/{id}/images', [ImageController::class, 'store']);
     Route::apiResource('articles', ArticleController::class, ['as' => 'api'])->except(['index', 'show', 'my_purchases']);

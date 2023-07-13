@@ -20,10 +20,15 @@ class ConversationClientResource extends JsonResource
     public function toArray(Request $request)
     {
 
-            return [
+        $idVendeur = Article::find($this->article_id)->user_id;
+        $nomvendeur = User::find($idVendeur)->name;
+        return [
                 'id' => $this->id,
+                'vendeur_id' => $this->user_id,
+                'vendeur_name' => $nomvendeur,
                 'article_id' => $this->article_id,
                 'article_title' => Article::find($this->article_id)->title,
+                'buyer' => Article::find($this->article_id)->Buyer,
                 'user_id' => $this->user_id,
                 'created_at' => \Carbon\Carbon::parse($this->created_at)->isoFormat('Y-m-d H:m:s'),
             ];

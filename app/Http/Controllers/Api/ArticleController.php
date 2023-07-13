@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Image;
 use App\Models\Article;
 use App\Models\Category;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use App\Models\Visites_articles;
 use App\Http\Controllers\Controller;
@@ -256,6 +257,29 @@ class ArticleController extends Controller
         $data = new ArticleCollection($articles);
 
         return response()->json($data);
+    }
+
+    public function actionVente(Article $article, $id)
+    {
+        $user = User::find($id);
+       $article->Buyer = $user->id;
+        //dd($user);
+        $req = $article->whereNotNull('Buyer')->first();
+
+        // On sauvegarde
+        if (!$req) {
+            $article->save();
+            return response()->json([
+                'message' => 'Article bien vendu !'
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Déjà vendu'
+        ], 200);
+
+    
+        
     }
 
     public function my_purchases()
