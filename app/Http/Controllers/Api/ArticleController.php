@@ -109,16 +109,16 @@ class ArticleController extends Controller
         return response()->json($similarArticles);
     }
 
-    
+
     public function getArticlesByCategory(Category $category)
     {
         $articles = $category->articles;
 
         return ArticleResource::collection($articles);
     }
-    
 
-    
+
+
 
     /**
      * @OA\Post(
@@ -217,9 +217,7 @@ class ArticleController extends Controller
                 'article_id' => $article->id
             ]);
             // On compte le nombre d'enregistrement et on le donne au champ vues_count de l'article
-          $nmbreDeVue =  Visites_articles::where('article_id', $article->id)
-                ->whereNotNull('user_id')
-                ->orWhereNotNull('ip_address')
+            $nmbreDeVue = Visites_articles::where('article_id', $article->id)
                 ->count();
             $article->vues_count = $nmbreDeVue;
             $article->save();
@@ -252,8 +250,8 @@ class ArticleController extends Controller
     {
         // Récupère tous les articles vendus pour l'utilisateur connecté
         $articles = Article::whereNotNull('Buyer')
-        ->where('user_id', auth()->id())
-        ->get();
+            ->where('user_id', auth()->id())
+            ->get();
         $data = new ArticleCollection($articles);
 
         return response()->json($data);
@@ -262,7 +260,7 @@ class ArticleController extends Controller
     public function actionVente(Article $article, $id)
     {
         $user = User::find($id);
-       $article->Buyer = $user->id;
+        $article->Buyer = $user->id;
         //dd($user);
         $req = $article->whereNotNull('Buyer')->first();
 
@@ -278,15 +276,15 @@ class ArticleController extends Controller
             'message' => 'Déjà vendu'
         ], 200);
 
-    
-        
+
+
     }
 
     public function my_purchases()
     {
         $articles = Article::whereNotNull('Buyer')
-        ->where('Buyer', auth()->id())
-        ->get();
+            ->where('Buyer', auth()->id())
+            ->get();
         $data = new ArticleCollection($articles);
 
         return response()->json($data);

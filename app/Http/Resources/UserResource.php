@@ -21,8 +21,9 @@ class UserResource extends JsonResource
             'email'=> $this->email,
             'image'=> $this->image,
             'telephone'=> $this->telephone,
-            'date_created'=> \Carbon\Carbon::parse($this->created_at)->isoFormat('DD | MM | Y h:mm '),
-            'date_updated'=> \Carbon\Carbon::parse($this->updated_at)->isoFormat('DD | MM | Y h:mm ')
+            'temp' => $this->temp,
+            'date_created'=> $this->created_at,//\Carbon\Carbon::parse($this->created_at)->isoFormat('DD-MM-Y H:mm '),
+            'date_updated'=> $this->updated_at//\Carbon\Carbon::parse($this->updated_at)->isoFormat('DD-MM-Y H:mm ')
         ];
         //return parent::toArray($request);
     }

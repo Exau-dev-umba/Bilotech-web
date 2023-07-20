@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Models\Visites_articles;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
+use App\Models\Visites_articles;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -34,12 +35,15 @@ Route::post('/login', function (Request $request) {
             'message' => "Mot de passe ou email incorrect"
         ], 422);
     }
-    //$token = $user->createToken($request->email)->plainTextToken;
     $user = new UserResource(auth()->user());
     
     $ip = $request->ip();
     Visites_articles::where('ip_address', $ip)
         ->update(['user_id' => $user->id]);
+
+    // $time = now()->addSeconds(10);
+    // Mail::to($user->email)
+    // ->later($time,new WelcomeMail($user));
 
     return response()->json([
         'status' => true,
@@ -55,7 +59,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/allUser',[AuthController::class,'allUser']);
     /*Route of user*/
 
-    Route::get('/userUpdate', [AuthController::class, 'updateUser']);
+    Route::post('/user/update/{user}', [AuthController::class, 'updateUser']);
+    Route::post('/user/update/image/{user}', [AuthController::class, 'updateImageProfile']);
+
 
     Route::get('/singleUser', [AuthController::class, 'singleUser']);
 
